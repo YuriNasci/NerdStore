@@ -23,7 +23,10 @@ namespace NerdStore.Vendas.Domain
         // EF Rel.
         public Voucher Voucher { get; private set; }
 
-        public Pedido(Guid clienteId, bool voucherUtilizado, decimal desconto, decimal valorTotal)
+        public Pedido(Guid clienteId, 
+                      bool voucherUtilizado, 
+                      decimal desconto, 
+                      decimal valorTotal)
         {
             ClienteId = clienteId;
             VoucherUtilizado = voucherUtilizado;

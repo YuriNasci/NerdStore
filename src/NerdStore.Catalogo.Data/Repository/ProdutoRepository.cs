@@ -31,7 +31,12 @@ namespace NerdStore.Catalogo.Data.Repository
 
         public async Task<IEnumerable<Produto>> ObterPorCategoria(int codigo)
         {
-            return await _context.Produtos.AsNoTracking().Include(p => p.Categoria).Where(c => c.Categoria.Codigo == codigo).ToListAsync();
+            return await _context
+                            .Produtos
+                            .AsNoTracking()
+                            .Include(p => p.Categoria)
+                            .Where(c => c.Categoria.Codigo == codigo)
+                            .ToListAsync();
         }
 
         public async Task<IEnumerable<Categoria>> ObterCategorias()

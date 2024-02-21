@@ -13,7 +13,9 @@
   </p>
     
   <p align="right">
-    <strong>ALEXANDER SILVA</strong>   
+    <strong>ALEXANDER SILVA</strong><br>
+    <strong>IURY NASCIMENTO</strong><br>
+    <strong>PEDRO NOVAES</strong>   
   </p>
 
 ## Índice
@@ -45,59 +47,54 @@ Consulte a situação do projeto <a href="https://github.com/AlexanderVieira/Ner
 Veja como navegar entre pastas aqui:
 
 ```text
-SpotifyMusic/
-├── src/
-│    │
-│    └── Domain/
-│    │      └── AVS.SpotifyMusic.Domain/
-│    │               └── Core/    
-│    │               │     └── Data/
-│    │               │     └── Enums/
-│    │               │     └── Notificacoes/
-│    │               │     └── DomainObjects/
-│    │               │     └── ValueObjects/
-│    │               │     └── Utils/
-│    │               └── Contas/
-│    │               │     └── Interfaces/
-│    │               │     │       └── Repositories/
-│    │               │     │       └── Services/
-│    │               │     └── Entities/
-│    │               │     │     
-│    │               │     └── Services/  
-│    │               │     └── Factories/  
-│    │               └── Pagamentos/
-│    │               │     └── Interfaces/
-│    │               │     │       └── Repositories/
-│    │               │     │       └── Services/
-│    │               │     └── Entities/
-│    │               │     │     
-│    │               │     └── Services/
-│    │               └── Streming/
-│    │                     └── Interfaces/
-│    │                     │       └── Repositories/
-│    │                     │       └── Services/
-│    │                     └── Entities/
-│    │                     │     
-│    │                     └── Services/  
-│    │                     └── Factories/
-│    │                     └── ValueObjects/
-│    └── Infra/           
-│    │     │       
-│    │     └── AVS.SpotifyMusic.Infra.Data/
-│    │            └── Context/    
-│    │            └── Mapping/
-│    │            └── Migrations/
-│    │            └── Repositories/
-│    │     
-     ├── Services/
-│    └── UI/
-│    
-├── scripts/
-│    
-└── docs/
-│    
-└── Tests/
-        
+NerdStore/
+   └── src/
+        │
+        └── EventSourcing/
+        └── NerdStore.Catalogo.Application/
+        │     └── AutoMapper/
+        │     └── Services/
+        │     └── ViewModels/
+        └── NerdStore.Catalogo.Data/
+        │     └── Mappings/
+        │     └── Migrations/
+        │     └── Repository/
+        └── NerdStore.Catalogo.Domain/
+        │     └── Events/         
+        └── NerdStore.Core/
+        │     └── Communication/
+        │     └── Data/
+        │     └── DmainObjects/
+        │     └── Extensions/
+        │     └── Messages/
+        └── NerdStore.Pagamentos.AntiCorruption/
+        └── NerdStore.Pagamentos.Business/
+        │     └── Events/
+        └── NerdStore.Pagamentos.Data/
+        │     └── Mappings/
+        │     └── Migrations/
+        │     └── Repository/
+        └── NerdStore.Vendas.Application/
+        │     └── Commands/
+        │     └── Events/
+        │     └── Queries/
+        └── NerdStore.Vendas.Data/
+        │     └── Mappings/
+        │     └── Migrations/
+        │     └── Repository/
+        └── NerdStore.Vendas.Domain/
+        └── NerdStore.WebApp.MVC/
+        │    └── Areas/    
+        │    └── Controllers/
+        │    └── Extensions/
+        │    └── Migrations/
+        │    └── Models/
+        │    └── Setup/
+        │    └── Views/
+        │    
+        └── docs/
+        │    
+        └── Tests/        
 ```
 
 ## Erros e solicitações de recursos

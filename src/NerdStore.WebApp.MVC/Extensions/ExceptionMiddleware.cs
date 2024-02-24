@@ -19,8 +19,7 @@ namespace NerdStore.WebApp.MVC.Extensions
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
-        {            
-
+        {
             try
             {
                 await _next(httpContext);

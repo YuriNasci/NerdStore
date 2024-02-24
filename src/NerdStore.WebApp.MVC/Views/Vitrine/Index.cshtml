@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NerdStore.Catalogo.Application.ViewModels.ProdutoViewModel>
+﻿@model IEnumerable<ProdutoViewModel>
 
 @{
     ViewData["Title"] = "Vitrine";
@@ -58,7 +58,7 @@
 
     .space-ten {
         padding: 10px 0;
-    }   
+    }
 </style>
 <div class="container">
 
@@ -67,22 +67,30 @@
     <div class="row">
         <!-- BEGIN PRODUCTS -->
         @{
-            foreach (var produto in Model.OrderBy(p=>p.CategoriaId))
+            if (Model.Any())
             {
-                <div class="card shadow-sm col-md-3 col-sm-6 thumbnail">
-                <span>
-                    <a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img width="200" height="200" src="~/Images/@produto.Imagem" /></a>
-                    <h4>@produto.Nome</h4>
-                    <p>Apenas @produto.QuantidadeEstoque em estoque!</p>
-                    <p>@produto.Descricao</p>
-                    <hr class="line">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <p class="price">@produto.Valor.ToString("C")</p>
-                        </div>
+
+                foreach (var produto in Model.OrderBy(p => p.CategoriaId))
+                {
+                    <div class="card shadow-sm col-md-3 col-sm-6 thumbnail">
+                        <span>
+                            <a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img width="200" height="200" src="~/Images/@produto.Imagem" /></a>
+                            <h4>@produto.Nome</h4>
+                            <p>Apenas @produto.QuantidadeEstoque em estoque!</p>
+                            <p>@produto.Descricao</p>
+                            <hr class="line">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <p class="price">@produto.Valor.ToString("C")</p>
+                                </div>
+                            </div>
+                        </span>
                     </div>
-                </span>
-            </div>
+                }
+            }
+            else
+            {
+                <div><p>Não existem dados para exibição</p></div>
             }
         }
 

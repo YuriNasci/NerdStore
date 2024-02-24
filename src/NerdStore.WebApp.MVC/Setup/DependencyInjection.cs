@@ -94,7 +94,7 @@ namespace NerdStore.WebApp.MVC.Setup
             services.AddScoped<IPagamentoService, PagamentoService>();
             services.AddScoped<IPagamentoCartaoCreditoFacade, PagamentoCartaoCreditoFacade>();
             services.AddScoped<IPayPalGateway, PayPalGateway>();
-            services.AddScoped<IConfigurationManager, ConfigurationManager>();
+            services.AddScoped<IPagamentoConfigurationManager, PagamentoConfigurationManager>();
             services.AddScoped<PagamentoContext>();
 
             services.AddScoped<INotificationHandler<PedidoEstoqueConfirmadoEvent>, PagamentoEventHandler>();

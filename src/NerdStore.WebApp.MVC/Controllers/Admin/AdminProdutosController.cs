@@ -22,19 +22,21 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             return View(await _catalogoService.ObterTodos());
         }
 
+        [HttpGet]
         [Route("novo-produto")]
         public async Task<IActionResult> NovoProduto()
         {
             return View(await PopularCategorias(new ProdutoViewModel()));
         }
 
-        [Route("novo-produto")]
         [HttpPost]
+        [Route("novo-produto")]        
         public async Task<IActionResult> NovoProduto(ProdutoViewModel produtoViewModel)
         {
             if (!ModelState.IsValid) return View(await PopularCategorias(produtoViewModel));
 
-            await _catalogoService.AdicionarProduto(produtoViewModel);
+            var response = await _catalogoService.AdicionarProduto(produtoViewModel);
+            if(response.Status != 201) return View(await PopularCategorias(produtoViewModel));
 
             return RedirectToAction("Index");
         }
@@ -56,7 +58,8 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             ModelState.Remove("QuantidadeEstoque");
             if (!ModelState.IsValid) return View(await PopularCategorias(produtoViewModel));
 
-            await _catalogoService.AtualizarProduto(produtoViewModel);
+            var response = await _catalogoService.AtualizarProduto(produtoViewModel);
+            if (response.Status != 200) return View(await PopularCategorias(produtoViewModel));
 
             return RedirectToAction("Index");
         }
@@ -71,17 +74,9 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
         [HttpPost]
         [Route("produtos-atualizar-estoque")]
         public async Task<IActionResult> AtualizarEstoque(Guid id, int quantidade)
-        {
-            if (quantidade > 0)
-            {
-                await _catalogoService.ReporEstoque(id, quantidade);
-            }
-            else
-            {
-                await _catalogoService.DebitarEstoque(id, quantidade);
-            }
-
-            return View("Index", await _catalogoService.ObterTodos());
+        {           
+            await _catalogoService.AtualizarEstoque(id, quantidade);
+            return View("Index", await _catalogoService.ObterTodos());            
         }
 
         private async Task<ProdutoViewModel> PopularCategorias(ProdutoViewModel produto)

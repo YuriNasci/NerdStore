@@ -14,11 +14,11 @@ namespace NerdStore.WebApp.MVC.Services.Interfaces
         Task<ProdutoViewModel> ObterPorId(Guid id);
         Task<IEnumerable<ProdutoViewModel>> ObterTodos();
         Task<IEnumerable<CategoriaViewModel>> ObterCategorias();
-
         Task<ResponseResult> AdicionarProduto(ProdutoViewModel request);
         Task<ResponseResult> AtualizarProduto(ProdutoViewModel request);
-
-        Task<ProdutoViewModel> DebitarEstoque(Guid id, int quantidade);
-        Task<ProdutoViewModel> ReporEstoque(Guid id, int quantidade);
+        Task<ResponseResult> AtualizarEstoque(Guid id, int quantidade);
+        
+        //Task<ProdutoViewModel> DebitarEstoque(Guid id, int quantidade);
+        //Task<ProdutoViewModel> ReporEstoque(Guid id, int quantidade);
     }
 }

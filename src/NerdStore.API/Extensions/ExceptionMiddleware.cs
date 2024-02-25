@@ -1,11 +1,17 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using NerdStore.Core.Communication;
+using NerdStore.Core.DomainObjects;
 using System.Net;
+using System.Text;
+using System.Text.Json;
 
 namespace NerdStore.API.Extensions
 {
     public class ExceptionMiddleware
     {
-        private readonly RequestDelegate _next;       
+        private readonly RequestDelegate _next;
+
+        protected ICollection<string> Erros = new List<string>();        
+        
 
         public ExceptionMiddleware(RequestDelegate next)
         {
@@ -18,17 +24,21 @@ namespace NerdStore.API.Extensions
             {
                 await _next(httpContext);
             }
-            catch (InvalidOperationException)
+            catch (ArgumentNullException ex)
             {
-                HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError);
+                HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError, ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError, ex);
             }
             catch (DomainException ex)
             {                             
-                HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError);
+                HandleRequestExceptionAsync(httpContext, HttpStatusCode.BadRequest, ex);
             }
             catch (CustomHttpRequestException ex)
             {
-                HandleRequestExceptionAsync(httpContext, ex.StatusCode);
+                HandleRequestExceptionAsync(httpContext, ex.StatusCode, ex);
             }                      
             catch (HttpRequestException ex)
             {
@@ -42,15 +52,100 @@ namespace NerdStore.API.Extensions
                 };
 
                 var httpStatusCode = (HttpStatusCode)Enum.Parse(typeof(HttpStatusCode), statusCode.ToString());
-                HandleRequestExceptionAsync(httpContext, httpStatusCode);
+                HandleRequestExceptionAsync(httpContext, httpStatusCode, ex);
             }
 
         }
 
-        private static void HandleRequestExceptionAsync(HttpContext context, HttpStatusCode statusCode)
+        private void HandleRequestExceptionAsync(HttpContext context, HttpStatusCode statusCode, Exception exception)
         {
-            context.Response.StatusCode = (int)statusCode;
+            AdicionarErroProcessamento(exception.Message);
+
+            var responseResult = TratarMensagensRetorno((int)statusCode, exception);
+            var responseObject = JsonSerializer.Serialize(responseResult);
+            var data = Encoding.UTF8.GetBytes(responseObject);
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = responseResult.Status;
+            context.Response.Body.WriteAsync(data, 0, data.Length, CancellationToken.None);
+
         }
-       
+
+        private void AdicionarErroProcessamento(string mensagem)
+        {
+            Erros.Add(mensagem);
+        }
+
+        private ResponseResult TratarMensagensRetorno(int resultado, Exception exception)
+        {
+            switch (resultado)
+            {
+                case 200:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Sucesso.",
+                        Status = StatusCodes.Status200OK,
+                        SuccessMessage = exception.Message
+                    };
+
+                case 201:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Sucesso.",
+                        Status = StatusCodes.Status201Created,
+                        SuccessMessage = exception.Message
+                    };
+
+                case 204:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Sucesso.",
+                        Status = StatusCodes.Status204NoContent,
+                        SuccessMessage = exception.Message
+                    };
+
+                case 400:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status400BadRequest,
+                        Errors = new ResponseErrorMessages { Messages = Erros.ToList() }
+                    };
+
+                case 401:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status401Unauthorized,
+                        Errors = new ResponseErrorMessages { Messages = Erros.ToList() }
+                    };
+
+                case 403:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status403Forbidden,
+                        Errors = new ResponseErrorMessages { Messages = Erros.ToList() }
+                    };
+
+                case 404:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status404NotFound,
+                        Errors = new ResponseErrorMessages { Messages = Erros.ToList() }
+                    };
+
+                default:
+                    return new ResponseResult
+                    {
+                        Title = "Opa! Ocorreu um erro.",
+                        Status = StatusCodes.Status500InternalServerError,
+                        SuccessMessage = "Sistema indisponível. Tente mais tarde."
+                    };
+            }
+
+        }
+
     }
 }

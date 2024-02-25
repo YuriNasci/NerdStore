@@ -18,8 +18,9 @@ namespace NerdStore.WebApp.MVC.Controllers
         [Route("")]
         [Route("vitrine")]
         public async Task<IActionResult> Index()
-        {            
-            return View(await _catalogoService.ObterTodos());
+        {
+            var produtos = await _catalogoService.ObterTodos();
+            return View(produtos);
         }
 
         [HttpGet]

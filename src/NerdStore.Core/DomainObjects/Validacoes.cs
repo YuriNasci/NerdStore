@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Net;
+using System.Text.RegularExpressions;
 
 namespace NerdStore.Core.DomainObjects
 {
@@ -52,7 +53,7 @@ namespace NerdStore.Core.DomainObjects
         {
             if (valor == null || valor.Trim().Length == 0)
             {
-                throw new DomainException(mensagem);
+                throw new DomainException(mensagem, HttpStatusCode.BadRequest);
             }
         }
 
@@ -60,7 +61,7 @@ namespace NerdStore.Core.DomainObjects
         {
             if (object1 == null)
             {
-                throw new DomainException(mensagem);
+                throw new DomainException(mensagem, HttpStatusCode.BadRequest);
             }
         }
 

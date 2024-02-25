@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using NerdStore.Catalogo.Application.ViewModels;
@@ -63,7 +64,7 @@ namespace NerdStore.Catalogo.Application.Services
         {
             if (!_estoqueService.DebitarEstoque(id, quantidade).Result)
             {
-                throw new DomainException("Falha ao debitar estoque");
+                throw new DomainException("Falha ao debitar estoque", HttpStatusCode.BadRequest);
             }
 
             return _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterPorId(id));
@@ -73,7 +74,7 @@ namespace NerdStore.Catalogo.Application.Services
         {
             if (!_estoqueService.ReporEstoque(id, quantidade).Result)
             {
-                throw new DomainException("Falha ao repor estoque");
+                throw new DomainException("Falha ao repor estoque", HttpStatusCode.BadRequest);
             }
 
             return _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterPorId(id));

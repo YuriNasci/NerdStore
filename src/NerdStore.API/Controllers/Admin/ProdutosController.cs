@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NerdStore.API.Extensions;
 using NerdStore.Catalogo.Application.Services;
 using NerdStore.Catalogo.Application.ViewModels;
+using NerdStore.Core.DomainObjects;
 using NerdStore.Core.Services.WebAPI.Controllers;
+using System.Net;
 
 namespace NerdStore.API.Controllers.Admin
 {    
@@ -44,7 +47,7 @@ namespace NerdStore.API.Controllers.Admin
         public async Task<IActionResult> AtualizarProduto(ProdutoViewModel produtoViewModel)
         {            
             ModelState.Remove("QuantidadeEstoque");
-            if (!ModelState.IsValid) RespostaPersonalizada(StatusCodes.Status400BadRequest);
+            if (ModelState.IsValid) throw new CustomHttpRequestException(HttpStatusCode.Forbidden); //RespostaPersonalizada(StatusCodes.Status400BadRequest);
 
             var response = await _produtoAppService.AtualizarProduto(produtoViewModel);
 

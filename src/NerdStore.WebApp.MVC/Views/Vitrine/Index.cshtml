@@ -67,7 +67,7 @@
     <div class="row">
         <!-- BEGIN PRODUCTS -->
         @{
-            if (Model.Any())
+            if (Model != null && Model.Any())
             {
 
                 foreach (var produto in Model.OrderBy(p => p.CategoriaId))

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Options;
 using NerdStore.Core.Communication;
+using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Extensions;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.WebApp.MVC.Models;
 using NerdStore.WebApp.MVC.Services.Interfaces;
 
@@ -15,11 +17,17 @@ namespace NerdStore.WebApp.MVC.Services
     public class CatalogoService : TextSerializerService, ICatalogoService
     {
         private readonly HttpClient _httpClient;
+        //private readonly IMediatorHandler _mediatorHandler;
 
-        public CatalogoService(HttpClient httpClient, IOptions<AppSettings> settings)
+
+        public CatalogoService(HttpClient httpClient, 
+                               IOptions<AppSettings> settings, 
+                               INotificationHandler<DomainNotification> notifications, 
+                               IMediatorHandler mediatorHandler) : base(notifications, mediatorHandler)
         {
             _httpClient = httpClient;            
             _httpClient.BaseAddress = new Uri(settings.Value.CatalogoUrl);
+            //_mediatorHandler = mediatorHandler;
         }
 
         public async Task<ResponseResult> AdicionarProduto(ProdutoViewModel request)
@@ -35,9 +43,17 @@ namespace NerdStore.WebApp.MVC.Services
         {
             var content = GetContent(request);
             var response = await _httpClient.PutAsync($"/api/admin/editar-produto/", content);
-            if(HandlerResponseErrors(response)) 
-                return await DeserializeResponseObject<ResponseResult>(response);
-            return ReturnOk();
+            if (!HandlerResponseErrors(response))
+            {
+                var result = await DeserializeResponseObject<ResponseResult>(response);
+                foreach (var item in result.Errors.Messages)
+                {
+                    NotificarErro(result.Status.ToString(), item);
+                }
+
+            }
+            return await DeserializeResponseObject<ResponseResult>(response);
+            //return ReturnOk();
         } 
 
         public async Task<ProdutoViewModel> ObterPorId(Guid id)
@@ -51,7 +67,16 @@ namespace NerdStore.WebApp.MVC.Services
         {
             var response = await _httpClient.GetAsync($"/api/catalogo/produtos");
             if(response.StatusCode == HttpStatusCode.NotFound) return null;
-            HandlerResponseErrors(response);
+            if (!HandlerResponseErrors(response))
+            {
+                var result = await DeserializeResponseObject<ResponseResult>(response);
+                foreach ( var item in result.Errors.Messages)
+                {
+                    NotificarErro(result.Status.ToString(), item);
+                }
+                return null;
+            }               
+            
             return await DeserializeResponseObject<IEnumerable<ProdutoViewModel>>(response);
         }
 

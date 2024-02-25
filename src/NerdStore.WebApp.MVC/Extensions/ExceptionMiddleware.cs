@@ -90,7 +90,7 @@ namespace NerdStore.WebApp.MVC.Extensions
                 //}
 
                 //_authService.Logout();
-                context.Response.Redirect($"/login?ReturnUrl={context.Request.Path}");
+                context.Response.Redirect($"/Identity/Account/login?ReturnUrl={context.Request.Path}");
                 return;
             }
 

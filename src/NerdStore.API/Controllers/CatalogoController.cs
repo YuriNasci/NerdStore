@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NerdStore.Catalogo.Application.Services;
+using NerdStore.Core.DomainObjects;
 using NerdStore.Core.Services.WebAPI.Controllers;
+using System.Net;
 
 namespace NerdStore.API.Controllers
 {

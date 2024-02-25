@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Net;
 
 namespace NerdStore.Core.DomainObjects
@@ -17,7 +16,7 @@ namespace NerdStore.Core.DomainObjects
         public DomainException(string message, Exception innerException) : base(message, innerException)
         { }
 
-        public DomainException(HttpStatusCode statusCode)
+        public DomainException(string message, HttpStatusCode statusCode) : base(message)
         {
             StatusCode = statusCode;
         }

@@ -110,14 +110,11 @@ namespace NerdStore.Catalogo.Domain.Tests
         [InlineData(10, 5, 5)]
         public void Produto_DebitarEstoque_DeveAlterarQuantidadeEstoque(int estoqueInicial, int quantidadeDebitada, int estoqueFinalEsperado)
         {
-            // Arrange
             var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
             produto.ReporEstoque(estoqueInicial);
 
-            // Act
             produto.DebitarEstoque(quantidadeDebitada);
 
-            // Assert
             Assert.Equal(estoqueFinalEsperado, produto.QuantidadeEstoque);
         }
 
@@ -125,11 +122,9 @@ namespace NerdStore.Catalogo.Domain.Tests
         [InlineData(10, 15)]
         public void Produto_DebitarEstoque_DeveLancarExcecaoQuandoEstoqueInsuficiente(int estoqueInicial, int quantidadeDebitada)
         {
-            // Arrange
             var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
             produto.ReporEstoque(estoqueInicial);
 
-            // Act & Assert
             Assert.Throws<DomainException>(() => produto.DebitarEstoque(quantidadeDebitada));
         }
 

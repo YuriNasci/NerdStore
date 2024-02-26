@@ -46,7 +46,7 @@ namespace NerdStore.Catalogo.Application.Services
 
         public async Task<bool> AdicionarProduto(ProdutoViewModel produtoViewModel)
         {
-            var produto = _mapper.Map<Produto>(produtoViewModel);
+            var produto = _mapper.Map<Produto>(produtoViewModel);            
             _produtoRepository.Adicionar(produto);
 
             return await _produtoRepository.UnitOfWork.Commit();

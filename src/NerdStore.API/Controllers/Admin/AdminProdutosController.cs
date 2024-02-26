@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NerdStore.API.Extensions;
 using NerdStore.Catalogo.Application.Services;
 using NerdStore.Catalogo.Application.ViewModels;
-using NerdStore.Core.DomainObjects;
 using NerdStore.Core.Services.WebAPI.Controllers;
-using System.Net;
 
 namespace NerdStore.API.Controllers.Admin
-{    
+{
     [Route("api/admin")]
-    public class ProdutosController : MainController
+    public class AdminProdutosController : MainController
     {
         private readonly IProdutoAppService _produtoAppService;
 
-        public ProdutosController(IProdutoAppService produtoAppService)
+        public AdminProdutosController(IProdutoAppService produtoAppService)
         {
             _produtoAppService = produtoAppService;
         }
@@ -23,7 +20,10 @@ namespace NerdStore.API.Controllers.Admin
         public async Task<IActionResult> ObterProdutos()
         {
             var response = await _produtoAppService.ObterTodos();
-            if (response == null || !response.Any()) ProcessarRespostaMensagem(StatusCodes.Status404NotFound, "Não existem dados para exibição.");
+
+            if (response == null || !response.Any()) 
+                return ProcessarRespostaMensagem(StatusCodes.Status404NotFound, "Não existem dados para exibição.");
+
             return RespostaPersonalizada(response);
         }
 
@@ -31,27 +31,27 @@ namespace NerdStore.API.Controllers.Admin
         [Route("novo-produto")]
         public async Task<IActionResult> NovoProduto(ProdutoViewModel produtoViewModel)
         {
-            if (!ModelState.IsValid) return RespostaPersonalizada(StatusCodes.Status400BadRequest);
+            if (!ModelState.IsValid) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar criar um novo produto.");
 
             var response = await _produtoAppService.AdicionarProduto(produtoViewModel);
 
-            if(response == false) ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Opa! Ocorreu um erro ao tentar criar um novo produto.");
+            if(response == false) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar criar um novo produto.");
 
-            AdicionaMensagemSucesso("Produto criado com sucesso.");
+            AdicionaMensagemSucesso("Novo Produto criado com sucesso.");
 
             return RespostaPersonalizada(StatusCodes.Status201Created);
         }
 
         [HttpPut]
-        [Route("editar-produto")]
+        [Route("atualizar-produto")]
         public async Task<IActionResult> AtualizarProduto(ProdutoViewModel produtoViewModel)
         {            
             ModelState.Remove("QuantidadeEstoque");
-            if (ModelState.IsValid) throw new CustomHttpRequestException(HttpStatusCode.Forbidden); //RespostaPersonalizada(StatusCodes.Status400BadRequest);
+            if (!ModelState.IsValid) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar atualizar o produto.");
 
             var response = await _produtoAppService.AtualizarProduto(produtoViewModel);
 
-            if (response == false) ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Opa! Ocorreu um erro ao tentar atualizar o produto.");
+            if (response == false) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar atualizar o produto.");
             
             AdicionaMensagemSucesso("Produto atualizado com sucesso.");
             
@@ -59,10 +59,10 @@ namespace NerdStore.API.Controllers.Admin
         }
 
         [HttpPut]
-        [Route("produtos-atualizar-estoque/{id}/{quantidade}")]
+        [Route("produto/{id}/atualizar-estoque/{quantidade}")]
         public async Task<IActionResult> AtualizarEstoque([FromRoute]Guid id, [FromRoute]int quantidade)
         {
-            if (!ModelState.IsValid) RespostaPersonalizada(StatusCodes.Status400BadRequest);
+            if (!ModelState.IsValid) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar atualizar o estoque.");
             
             ProdutoViewModel vmProduto;
             if (quantidade > 0)
@@ -76,7 +76,7 @@ namespace NerdStore.API.Controllers.Admin
 
             if (vmProduto == null) 
             {
-                ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Opa! Ocorreu um erro ao tentar atualizar o estoque.");
+                return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar atualizar o estoque.");
             }
 
             AdicionaMensagemSucesso("Estoque atualizado com sucesso.");
@@ -89,6 +89,7 @@ namespace NerdStore.API.Controllers.Admin
         public async Task<IActionResult> ObterCategorias()
         {
             var categorias = await _produtoAppService.ObterCategorias();
+
             return RespostaPersonalizada(categorias);
         }
     }

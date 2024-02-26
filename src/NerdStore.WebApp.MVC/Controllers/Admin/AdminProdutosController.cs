@@ -38,6 +38,8 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             var response = await _catalogoService.AdicionarProduto(produtoViewModel);
             if(response.Status != 201) return View(await PopularCategorias(produtoViewModel));
 
+            TempData["Sucesso"] = response.SuccessMessage;
+
             return RedirectToAction("Index");
         }
 
@@ -53,6 +55,7 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
         public async Task<IActionResult> AtualizarProduto(Guid id, ProdutoViewModel produtoViewModel)
         {
             var produto = await _catalogoService.ObterPorId(id);
+            if(produto == null) return View(await PopularCategorias(produtoViewModel));
             produtoViewModel.QuantidadeEstoque = produto.QuantidadeEstoque;
 
             ModelState.Remove("QuantidadeEstoque");
@@ -60,6 +63,8 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
 
             var response = await _catalogoService.AtualizarProduto(produtoViewModel);
             if (response.Status != 200) return View(await PopularCategorias(produtoViewModel));
+
+            TempData["Sucesso"] = response.SuccessMessage;
 
             return RedirectToAction("Index");
         }
@@ -74,9 +79,16 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
         [HttpPost]
         [Route("produtos-atualizar-estoque")]
         public async Task<IActionResult> AtualizarEstoque(Guid id, int quantidade)
-        {           
-            await _catalogoService.AtualizarEstoque(id, quantidade);
-            return View("Index", await _catalogoService.ObterTodos());            
+        {            
+            var response = await _catalogoService.AtualizarEstoque(id, quantidade);
+            
+            if (response.Status != 200) return View("Estoque", await _catalogoService.ObterPorId(id));
+
+            TempData["Sucesso"] = response.SuccessMessage;
+
+            var produtos = await _catalogoService.ObterTodos();
+            
+            return RedirectToAction("Index", produtos);            
         }
 
         private async Task<ProdutoViewModel> PopularCategorias(ProdutoViewModel produto)

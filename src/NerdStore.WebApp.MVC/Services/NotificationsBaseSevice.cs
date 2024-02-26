@@ -32,6 +32,11 @@ namespace NerdStore.WebApp.MVC.Services
             return _notifications.ObterNotificacoes().Select(c => c.Value).ToList();
         }
 
+        protected void LimparNotifications()
+        {
+            _notifications.Dispose();
+        }
+
         protected void NotificarErro(string codigo, string mensagem)
         {
             _mediatorHandler.PublicarNotificacao(new DomainNotification(codigo, mensagem));

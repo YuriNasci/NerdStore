@@ -44,7 +44,7 @@ namespace NerdStore.WebApp.MVC.Services
                 case 403:
                     throw new CustomHttpRequestException(response.StatusCode);
                 case 404:
-                    break;                   
+                    return false;
                 case 500:
                     throw new CustomHttpRequestException(response.StatusCode);
 

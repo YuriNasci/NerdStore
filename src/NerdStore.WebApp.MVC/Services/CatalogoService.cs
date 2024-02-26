@@ -16,8 +16,7 @@ namespace NerdStore.WebApp.MVC.Services
 {
     public class CatalogoService : TextSerializerService, ICatalogoService
     {
-        private readonly HttpClient _httpClient;
-        //private readonly IMediatorHandler _mediatorHandler;
+        private readonly HttpClient _httpClient;        
 
 
         public CatalogoService(HttpClient httpClient, 
@@ -26,23 +25,13 @@ namespace NerdStore.WebApp.MVC.Services
                                IMediatorHandler mediatorHandler) : base(notifications, mediatorHandler)
         {
             _httpClient = httpClient;            
-            _httpClient.BaseAddress = new Uri(settings.Value.CatalogoUrl);
-            //_mediatorHandler = mediatorHandler;
+            _httpClient.BaseAddress = new Uri(settings.Value.CatalogoUrl);            
         }
 
         public async Task<ResponseResult> AdicionarProduto(ProdutoViewModel request)
         {
             var content = GetContent(request);
             var response = await _httpClient.PostAsync("/api/admin/novo-produto", content);
-            if(HandlerResponseErrors(response)) 
-                return await DeserializeResponseObject<ResponseResult>(response);
-            return ReturnOk();
-        }
- 
-        public async Task<ResponseResult> AtualizarProduto(ProdutoViewModel request)
-        {
-            var content = GetContent(request);
-            var response = await _httpClient.PutAsync($"/api/admin/editar-produto/", content);
             if (!HandlerResponseErrors(response))
             {
                 var result = await DeserializeResponseObject<ResponseResult>(response);
@@ -53,7 +42,22 @@ namespace NerdStore.WebApp.MVC.Services
 
             }
             return await DeserializeResponseObject<ResponseResult>(response);
-            //return ReturnOk();
+        }
+ 
+        public async Task<ResponseResult> AtualizarProduto(ProdutoViewModel request)
+        {
+            var content = GetContent(request);
+            var response = await _httpClient.PutAsync($"/api/admin/atualizar-produto/", content);
+            if (!HandlerResponseErrors(response))
+            {
+                var result = await DeserializeResponseObject<ResponseResult>(response);
+                foreach (var item in result.Errors.Messages)
+                {
+                    NotificarErro(result.Status.ToString(), item);
+                }
+
+            }
+            return await DeserializeResponseObject<ResponseResult>(response);            
         } 
 
         public async Task<ProdutoViewModel> ObterPorId(Guid id)
@@ -66,7 +70,7 @@ namespace NerdStore.WebApp.MVC.Services
         public async Task<IEnumerable<ProdutoViewModel>> ObterTodos()
         {
             var response = await _httpClient.GetAsync($"/api/catalogo/produtos");
-            if(response.StatusCode == HttpStatusCode.NotFound) return null;
+            //if(response.StatusCode == HttpStatusCode.NotFound) return null;
             if (!HandlerResponseErrors(response))
             {
                 var result = await DeserializeResponseObject<ResponseResult>(response);
@@ -75,8 +79,23 @@ namespace NerdStore.WebApp.MVC.Services
                     NotificarErro(result.Status.ToString(), item);
                 }
                 return null;
-            }               
+            }
+            return await DeserializeResponseObject<IEnumerable<ProdutoViewModel>>(response);
+        }
+
+        public async Task<IEnumerable<ProdutoViewModel>> ObterTodosProdutos()
+        {
+            var response = await _httpClient.GetAsync($"/api/admin/produtos");
             
+            if (!HandlerResponseErrors(response))
+            {
+                var result = await DeserializeResponseObject<ResponseResult>(response);
+                foreach (var item in result.Errors.Messages)
+                {
+                    NotificarErro(result.Status.ToString(), item);
+                }
+                return null;
+            }
             return await DeserializeResponseObject<IEnumerable<ProdutoViewModel>>(response);
         }
 
@@ -97,11 +116,17 @@ namespace NerdStore.WebApp.MVC.Services
 
         public async Task<ResponseResult> AtualizarEstoque(Guid id, int quantidade)
         {            
-            var response = await _httpClient.PutAsync($"/api/admin/produtos-atualizar-estoque/{id}/{quantidade}", null);
+            var response = await _httpClient.PutAsync($"/api/admin/produto/{id}/atualizar-estoque/{quantidade}", null);
             if (response.StatusCode == HttpStatusCode.NotFound) return null;
             if (!HandlerResponseErrors(response))
-                return await DeserializeResponseObject<ResponseResult>(response);
-            return ReturnOk();
+            {                
+                var result = await DeserializeResponseObject<ResponseResult>(response);
+                foreach (var item in result.Errors.Messages)
+                {
+                    NotificarErro(result.Status.ToString(), item);
+                }                
+            }
+            return await DeserializeResponseObject<ResponseResult>(response);            
         }
         
     }

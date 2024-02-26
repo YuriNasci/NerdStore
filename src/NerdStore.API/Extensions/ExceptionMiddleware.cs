@@ -1,4 +1,5 @@
-﻿using NerdStore.Core.Communication;
+﻿using Microsoft.Data.SqlClient;
+using NerdStore.Core.Communication;
 using NerdStore.Core.DomainObjects;
 using System.Net;
 using System.Text;
@@ -8,14 +9,15 @@ namespace NerdStore.API.Extensions
 {
     public class ExceptionMiddleware
     {
-        private readonly RequestDelegate _next;
+        private readonly RequestDelegate _next;        
 
-        protected ICollection<string> Erros = new List<string>();        
-        
+        private ICollection<string> Erros { get; set; }
+
 
         public ExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
+            Erros = new List<string>();
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -28,7 +30,15 @@ namespace NerdStore.API.Extensions
             {
                 HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError, ex);
             }
+            catch (NullReferenceException ex)
+            {
+                HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError, ex);
+            }
             catch (InvalidOperationException ex)
+            {
+                HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError, ex);
+            }
+            catch (SqlException ex)
             {
                 HandleRequestExceptionAsync(httpContext, HttpStatusCode.InternalServerError, ex);
             }
@@ -36,10 +46,14 @@ namespace NerdStore.API.Extensions
             {                             
                 HandleRequestExceptionAsync(httpContext, HttpStatusCode.BadRequest, ex);
             }
+            catch (AggregateException ex)
+            {
+                HandleRequestExceptionAsync(httpContext, HttpStatusCode.BadRequest, ex);
+            }
             catch (CustomHttpRequestException ex)
             {
                 HandleRequestExceptionAsync(httpContext, ex.StatusCode, ex);
-            }                      
+            }            
             catch (HttpRequestException ex)
             {
                 var statusCode = ex.StatusCode switch
@@ -59,6 +73,8 @@ namespace NerdStore.API.Extensions
 
         private void HandleRequestExceptionAsync(HttpContext context, HttpStatusCode statusCode, Exception exception)
         {
+            if (PossuiErroProcessamento()) LimparErroProcessamento();            
+            
             AdicionarErroProcessamento(exception.Message);
 
             var responseResult = TratarMensagensRetorno((int)statusCode, exception);
@@ -74,6 +90,17 @@ namespace NerdStore.API.Extensions
         private void AdicionarErroProcessamento(string mensagem)
         {
             Erros.Add(mensagem);
+        }
+
+        private void LimparErroProcessamento()
+        {
+            Erros.Clear();
+        }
+
+        private bool PossuiErroProcessamento()
+        {
+            if (Erros == null || !Erros.Any()) return false;            
+            return true;
         }
 
         private ResponseResult TratarMensagensRetorno(int resultado, Exception exception)

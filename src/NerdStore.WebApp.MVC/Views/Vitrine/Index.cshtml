@@ -63,7 +63,10 @@
 <div class="container">
 
     <h1>Vitrine de Produtos</h1>
-    <br />
+    <hr />
+
+    <vc:summary />
+
     <div class="row">
         <!-- BEGIN PRODUCTS -->
         @{
@@ -88,10 +91,7 @@
                     </div>
                 }
             }
-            else
-            {
-                <div><p>Não existem dados para exibição</p></div>
-            }
+          
         }
 
         <!-- END PRODUCTS -->

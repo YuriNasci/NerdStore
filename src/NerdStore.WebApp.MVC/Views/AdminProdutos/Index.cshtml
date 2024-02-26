@@ -64,6 +64,9 @@
 
     <h1>Administração de Produtos</h1>
     <hr />
+
+    <vc:summary/>
+
     <div class="row">
         <a asp-controller="AdminProdutos" asp-action="NovoProduto" class="btn btn-success right">+ Adicionar Novo</a>
     </div>
@@ -71,23 +74,25 @@
     <div class="row">
         <!-- BEGIN PRODUCTS -->
         @{
-            foreach (var produto in Model.OrderBy(p => p.CategoriaId))
-            {
-            <div class="col-md-3 col-sm-6">
-                <span class="thumbnail">
-                    <img width="200" height="200" src="~/Images/@produto.Imagem" />
-                    <h4>@produto.Nome</h4>
-                    <p>@produto.QuantidadeEstoque em estoque</p>
-                    <p>@produto.Descricao</p>
-                    <p class="price">@produto.Valor.ToString("C")</p>
-                    <hr class="line">
-                    <div class="row">
-                        <a asp-controller="AdminProdutos" asp-action="AtualizarProduto" asp-route-id="@produto.Id" class="btn btn-success right">Editar</a> &nbsp;
-                        <a asp-controller="AdminProdutos" asp-action="AtualizarEstoque" asp-route-id="@produto.Id" class="btn btn-info right">Estoque</a>
+            if(Model != null && Model.Any()){
+                foreach (var produto in Model.OrderBy(p => p.CategoriaId))
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <span class="thumbnail">
+                            <img width="200" height="200" src="~/Images/@produto.Imagem" />
+                            <h4>@produto.Nome</h4>
+                            <p>@produto.QuantidadeEstoque em estoque</p>
+                            <p>@produto.Descricao</p>
+                            <p class="price">@produto.Valor.ToString("C")</p>
+                            <hr class="line">
+                            <div class="row">
+                                <a asp-controller="AdminProdutos" asp-action="AtualizarProduto" asp-route-id="@produto.Id" class="btn btn-success right">Editar</a> &nbsp;
+                                <a asp-controller="AdminProdutos" asp-action="AtualizarEstoque" asp-route-id="@produto.Id" class="btn btn-info right">Estoque</a>
+                            </div>
+                        </span>
                     </div>
-                </span>
-            </div>
-            }
+                }
+            }            
         }
 
         <!-- END PRODUCTS -->

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NerdStore.Catalogo.Application.Services;
-using NerdStore.Core.DomainObjects;
 using NerdStore.Core.Services.WebAPI.Controllers;
-using System.Net;
 
 namespace NerdStore.API.Controllers
 {
@@ -18,18 +16,22 @@ namespace NerdStore.API.Controllers
         }
 
         [HttpGet("produtos")]
-        public async Task<IActionResult> GetProdutos()
+        public async Task<IActionResult> ObterProdutos()
         {
             var response = await _produtoAppService.ObterTodos();
-            if (response == null || !response.Any()) ProcessarRespostaMensagem(StatusCodes.Status404NotFound, "Não existem dados para exibição.");
+
+            if (response == null || !response.Any()) return ProcessarRespostaMensagem(StatusCodes.Status404NotFound, "Não existem dados para exibição.");
+            
             return RespostaPersonalizada(response);
         }
 
         [HttpGet("produto-detalhe/{id}")]
-        public async Task<IActionResult> GetProduto(Guid id)
+        public async Task<IActionResult> ObterProduto(Guid id)
         {
             var response = await _produtoAppService.ObterPorId(id);
-            if (response == null) ProcessarRespostaMensagem(StatusCodes.Status404NotFound, "Produto não encontrado.");
+
+            if (response == null) return ProcessarRespostaMensagem(StatusCodes.Status404NotFound, "Produto não encontrado.");
+            
             return RespostaPersonalizada(response);
         }        
         

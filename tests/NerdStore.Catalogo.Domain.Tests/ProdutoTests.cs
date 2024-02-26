@@ -9,7 +9,6 @@ namespace NerdStore.Catalogo.Domain.Tests
         [Fact]
         public void Produto_Validar_ValidacoesDevemRetornarExceptions()
         {
-
             // Arrange & Act & Assert
 
             var ex = Assert.Throws<DomainException>(() =>
@@ -48,5 +47,91 @@ namespace NerdStore.Catalogo.Domain.Tests
 
             Assert.Equal("O campo Altura não pode ser menor ou igual a 0", ex.Message);
         }
+
+        [Fact]
+        public void Produto_Ativar_DeveAtivarProduto()
+        {
+            var produto = new Produto("Nome", "Descricao", false, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
+
+            produto.Ativar();
+
+            Assert.True(produto.Ativo);
+        }
+
+        [Fact]
+        public void Produto_Desativar_DeveDesativarProduto()
+        {
+            var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
+
+            produto.Desativar();
+
+            Assert.False(produto.Ativo);
+        }
+
+        [Fact]
+        public void Produto_AlterarCategoria_DeveAlterarCategoriaDoProduto()
+        {
+            var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
+            var novaCategoria = new Categoria("Nova Categoria", 123);
+
+            produto.AlterarCategoria(novaCategoria);
+
+            Assert.Equal(novaCategoria, produto.Categoria);
+            Assert.Equal(novaCategoria.Id, produto.CategoriaId);
+        }
+
+
+        [Fact]
+        public void Produto_AlterarDescricao_DeveAlterarDescricaoDoProduto()
+        {
+            var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
+            var novaDescricao = "Nova Descrição";
+
+
+            produto.AlterarDescricao(novaDescricao);
+
+            Assert.Equal(novaDescricao, produto.Descricao);
+        }
+
+        [Theory]
+        [InlineData(10, true)]
+        [InlineData(0, false)]
+        public void Produto_PossuiEstoque_DeveRetornarTrueQuandoEstoqueSuficiente(int quantidadeEstoque, bool resultadoEsperado)
+        {
+            var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
+            produto.ReporEstoque(quantidadeEstoque);
+
+            var possuiEstoque = produto.PossuiEstoque(5);
+
+            Assert.Equal(resultadoEsperado, possuiEstoque);
+        }
+
+        [Theory]
+        [InlineData(10, 5, 5)]
+        public void Produto_DebitarEstoque_DeveAlterarQuantidadeEstoque(int estoqueInicial, int quantidadeDebitada, int estoqueFinalEsperado)
+        {
+            // Arrange
+            var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
+            produto.ReporEstoque(estoqueInicial);
+
+            // Act
+            produto.DebitarEstoque(quantidadeDebitada);
+
+            // Assert
+            Assert.Equal(estoqueFinalEsperado, produto.QuantidadeEstoque);
+        }
+
+        [Theory]
+        [InlineData(10, 15)]
+        public void Produto_DebitarEstoque_DeveLancarExcecaoQuandoEstoqueInsuficiente(int estoqueInicial, int quantidadeDebitada)
+        {
+            // Arrange
+            var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
+            produto.ReporEstoque(estoqueInicial);
+
+            // Act & Assert
+            Assert.Throws<DomainException>(() => produto.DebitarEstoque(quantidadeDebitada));
+        }
+
     }
 }

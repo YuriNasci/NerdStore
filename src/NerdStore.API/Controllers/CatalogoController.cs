@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using NerdStore.Catalogo.Application.Services;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Core.Services.WebAPI.Controllers;
 
 namespace NerdStore.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/[controller]")]   
     public class CatalogoController : MainController
     {
         private readonly IProdutoAppService _produtoAppService;
 
-        public CatalogoController(IProdutoAppService produtoAppService)
+        public CatalogoController(IProdutoAppService produtoAppService, 
+                                  INotificationHandler<DomainNotification> notifications,
+                                  IMediatorHandler mediatorHandler) : base(notifications, mediatorHandler)
         {
             _produtoAppService = produtoAppService;
         }

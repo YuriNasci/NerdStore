@@ -47,7 +47,7 @@ namespace NerdStore.WebApp.MVC.Services
         public async Task<ResponseResult> AtualizarProduto(ProdutoViewModel request)
         {
             var content = GetContent(request);
-            var response = await _httpClient.PutAsync($"/api/admin/atualizar-produto/", content);
+            var response = await _httpClient.PutAsync($"/api/admin/atualizar-produto", content);
             if (!HandlerResponseErrors(response))
             {
                 var result = await DeserializeResponseObject<ResponseResult>(response);

@@ -115,6 +115,10 @@ namespace NerdStore.WebApp.MVC
                     name: "default",
                     pattern: "{controller=Vitrine}/{action=Index}/{id?}");
 
+                endpoints.MapControllerRoute(
+                    name: "carrinho",
+                    pattern: "{controller=Carrinho}/{action=AdicionarItem}/{id?}/{quantidade?}");
+
                 endpoints.MapRazorPages();
 
             });            

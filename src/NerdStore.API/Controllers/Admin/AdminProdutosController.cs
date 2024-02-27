@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using NerdStore.Catalogo.Application.Services;
 using NerdStore.Catalogo.Application.ViewModels;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Core.Services.WebAPI.Controllers;
 
 namespace NerdStore.API.Controllers.Admin
@@ -10,7 +13,9 @@ namespace NerdStore.API.Controllers.Admin
     {
         private readonly IProdutoAppService _produtoAppService;
 
-        public AdminProdutosController(IProdutoAppService produtoAppService)
+        public AdminProdutosController(IProdutoAppService produtoAppService, 
+                                       INotificationHandler<DomainNotification> notifications,
+                                       IMediatorHandler mediatorHandler) : base(notifications, mediatorHandler)
         {
             _produtoAppService = produtoAppService;
         }

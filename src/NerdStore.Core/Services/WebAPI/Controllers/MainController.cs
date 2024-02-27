@@ -1,24 +1,53 @@
-﻿using FluentValidation.Results;
-using NerdStore.Core.Communication;
+﻿using MediatR;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ActionResult = Microsoft.AspNetCore.Mvc.ActionResult;
-using ControllerBase = Microsoft.AspNetCore.Mvc.ControllerBase;
-using ModelStateDictionary = Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NerdStore.Core.Communication;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
+
 
 namespace NerdStore.Core.Services.WebAPI.Controllers
 {
     [ApiController]
-    public abstract class MainController : ControllerBase
+    public abstract class MainController : Controller
     {
         protected ICollection<string> Erros = new List<string>();
         protected ValidationResult ValidationResult { get; set; }        
-        protected string MensagemSucesso { get; set; }
+        protected string MensagemSucesso { get; set; }        
 
-        
+        protected Guid ClienteId = Guid.Parse("4885e451-b0e4-4490-b959-04fabc806d32");
+
+        private readonly DomainNotificationHandler _notifications;
+
+        private readonly IMediatorHandler _mediatorHandler;
+
+        protected MainController(INotificationHandler<DomainNotification> notifications,
+                                 IMediatorHandler mediatorHandler)
+        {
+            _notifications = (DomainNotificationHandler)notifications;
+            _mediatorHandler = mediatorHandler;
+        }
+
+        protected bool TemNotificacao()
+        {
+            return !_notifications.TemNotificacao();
+        }
+
+        protected IEnumerable<string> ObterNotificacoesErro()
+        {
+            return _notifications.ObterNotificacoes().Select(c => c.Value).ToList();
+        }
+
+        protected void NotificarErro(string codigo, string mensagem)
+        {
+            _mediatorHandler.PublicarNotificacao(new DomainNotification(codigo, mensagem));
+        }
+
         protected ActionResult RespostaPersonalizada(object resultado = null)
         {
             if (OperacaoValida())
@@ -34,6 +63,7 @@ namespace NerdStore.Core.Services.WebAPI.Controllers
                 { "Mensagens", Erros.ToArray() }
             }));
         }
+
         protected ActionResult RespostaPersonalizada(ModelStateDictionary modelState)
         {
             var modelErrorCollection = modelState.Values.Select(x => x.Errors);
@@ -150,11 +180,11 @@ namespace NerdStore.Core.Services.WebAPI.Controllers
                     });
 
                 default:
-                    return StatusCode(StatusCodes.Status500InternalServerError, new
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ResponseResult
                     {
                         Title = "Opa! Ocorreu um erro.",
                         Status = StatusCodes.Status500InternalServerError,
-                        Message = "Sistema indisponível. Tente mais tarde."
+                        Errors = new ResponseErrorMessages { Messages = Erros.ToList() }
                     });
             }
 

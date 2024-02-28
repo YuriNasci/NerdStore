@@ -21,7 +21,8 @@ namespace NerdStore.WebApp.MVC.Controllers
         [Route("meus-pedidos")]
         public async Task<IActionResult> Index()
         {
-            return View(await _vendasService.ObterPedidosCliente(ClienteId));
+            var response = await _vendasService.ObterPedidosCliente();
+            return View(response);
         }
     }
 }

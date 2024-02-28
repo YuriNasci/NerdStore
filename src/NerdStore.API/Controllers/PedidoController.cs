@@ -7,7 +7,7 @@ using NerdStore.Vendas.Application.Queries;
 
 namespace NerdStore.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/pedido")]
     public class PedidoController : MainController
     {
         private readonly IPedidoQueries _pedidoQueries;

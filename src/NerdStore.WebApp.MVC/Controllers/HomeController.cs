@@ -1,29 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NerdStore.WebApp.MVC.Models;
 
 namespace NerdStore.WebApp.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        [Route("sistema-indisponivel")]
+        public IActionResult SistemaIndisponivel()
         {
-            return View();
+            var modelErro = new ErrorViewModel
+            {
+                Message = "O sistema está temporariamente indisponível, isto pode ocorrer em momentos de sobrecarga de usuários.",
+                Title = "Sistema indisponível.",
+                ErroCode = 500
+            };
+
+            return View("Error", modelErro);
         }
 
-        public IActionResult Privacy()
+        [Route("erro/{id:length(3,3)}")]
+        public IActionResult Error(int id)
         {
-            return View();
-        }
+            var vmErro = new ErrorViewModel();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (id == 500)
+            {
+                vmErro.Message = "Ocorreu um erro! Tente novamente mais tarde ou contate nosso suporte.";
+                vmErro.Title = "Ocorreu um erro!";
+                vmErro.ErroCode = id;
+            }
+            else if (id == 404)
+            {
+                vmErro.Message =
+                    "A página que está procurando não existe! <br />Em caso de dúvidas entre em contato com nosso suporte";
+                vmErro.Title = "Ops! Página não encontrada.";
+                vmErro.ErroCode = id;
+            }
+            else if (id == 403)
+            {
+                vmErro.Message = "Você não tem permissão para fazer isto.";
+                vmErro.Title = "Acesso Negado";
+                vmErro.ErroCode = id;
+            }
+            else
+            {
+                return StatusCode(400);
+            }
+
+            return View("Error", vmErro);
         }
     }
 }

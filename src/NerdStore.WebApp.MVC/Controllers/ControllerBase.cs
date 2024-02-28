@@ -27,7 +27,7 @@ namespace NerdStore.WebApp.MVC.Controllers
             return !_notifications.TemNotificacao();
         }
 
-        protected IEnumerable<string> ObterMensagensErro()
+        protected IEnumerable<string> ObterNotificacoesErro()
         {
             return _notifications.ObterNotificacoes().Select(c => c.Value).ToList();
         }

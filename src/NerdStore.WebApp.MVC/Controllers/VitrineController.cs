@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NerdStore.Catalogo.Application.Services;
+using NerdStore.WebApp.MVC.Services.Interfaces;
 
 namespace NerdStore.WebApp.MVC.Controllers
 {
     public class VitrineController : Controller
     {
-        private readonly IProdutoAppService _produtoAppService;
+        private readonly ICatalogoService _catalogoService;
 
-        public VitrineController(IProdutoAppService produtoAppService)
+        public VitrineController(ICatalogoService catalogoService)
         {
-            _produtoAppService = produtoAppService;
+            _catalogoService = catalogoService;
         }
 
         [HttpGet]
@@ -19,14 +19,15 @@ namespace NerdStore.WebApp.MVC.Controllers
         [Route("vitrine")]
         public async Task<IActionResult> Index()
         {
-            return View(await _produtoAppService.ObterTodos());
+            var produtos = await _catalogoService.ObterTodos();
+            return View(produtos);
         }
 
         [HttpGet]
         [Route("produto-detalhe/{id}")]
         public async Task<IActionResult> ProdutoDetalhe(Guid id)
         {
-            return View(await _produtoAppService.ObterPorId(id));
+            return View(await _catalogoService.ObterPorId(id));
         }
     }
 }

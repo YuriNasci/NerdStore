@@ -1,4 +1,4 @@
-﻿@model NerdStore.Catalogo.Application.ViewModels.ProdutoViewModel
+﻿@model ProdutoViewModel
 
 @{
     ViewData["Title"] = "NovoProduto";
@@ -7,6 +7,9 @@
 <h1>Novo Produto</h1>
 
 <hr />
+
+<vc:summary/>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="NovoProduto">

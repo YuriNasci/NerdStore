@@ -7,18 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NerdStore.Catalogo.Application.AutoMapper;
-using NerdStore.Catalogo.Data;
-using NerdStore.Pagamentos.Data;
-using NerdStore.Vendas.Data;
 using NerdStore.WebApp.MVC.Setup;
 using NerdStore.WebApp.MVC.Areas.Identity.Data;
 using NerdStore.WebApp.MVC.Extensions;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
-using Humanizer.Configuration;
 using Microsoft.AspNetCore.HttpOverrides;
 using NerdStore.Core.Extensions;
+using NerdStore.Vendas.Data;
 
 namespace NerdStore.WebApp.MVC
 {
@@ -59,19 +55,19 @@ namespace NerdStore.WebApp.MVC
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<CatalogoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<CatalogoContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<VendasContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<PagamentoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<PagamentoContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();            
 
-            services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
+            //services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
 
             services.AddMediatR(typeof(Startup));
 
@@ -114,6 +110,10 @@ namespace NerdStore.WebApp.MVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Vitrine}/{action=Index}/{id?}");
+
+                //endpoints.MapControllerRoute(
+                //    name: "carrinho",
+                //    pattern: "{controller=Carrinho}/{action=AdicionarItem}/{id?}/{quantidade?}");
 
                 endpoints.MapRazorPages();
 

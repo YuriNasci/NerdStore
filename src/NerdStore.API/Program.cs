@@ -74,7 +74,7 @@ builder.Services.AddDbContext<PagamentoContext>(options =>
 builder.Services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
 
 // Mediator
-builder.Services.AddMediatR(typeof(Program));
+builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
 
 // Notifications

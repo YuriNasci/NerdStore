@@ -26,14 +26,14 @@ namespace NerdStore.WebApp.MVC.Controllers
             if (id == 500)
             {
                 vmErro.Message = "Ocorreu um erro! Tente novamente mais tarde ou contate nosso suporte.";
-                vmErro.Title = "Ocorreu um erro!";
+                vmErro.Title = "Erro interno do servidor";
                 vmErro.ErroCode = id;
             }
             else if (id == 404)
             {
                 vmErro.Message =
                     "A página que está procurando não existe! <br />Em caso de dúvidas entre em contato com nosso suporte";
-                vmErro.Title = "Ops! Página não encontrada.";
+                vmErro.Title = "Página não encontrada";
                 vmErro.ErroCode = id;
             }
             else if (id == 403)
@@ -44,7 +44,9 @@ namespace NerdStore.WebApp.MVC.Controllers
             }
             else
             {
-                return StatusCode(400);
+                vmErro.Message = "Ocorreu um erro durante sua solicitação! Tente novamente mais tarde ou contate nosso suporte.";
+                vmErro.Title = "Falha na requisição";
+                vmErro.ErroCode = id;
             }
 
             return View("Error", vmErro);

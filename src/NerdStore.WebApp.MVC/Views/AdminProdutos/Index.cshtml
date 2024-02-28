@@ -74,7 +74,8 @@
     <div class="row">
         <!-- BEGIN PRODUCTS -->
         @{
-            if(Model != null && Model.Any()){
+            if(Model != null && Model.Any())
+            {
                 foreach (var produto in Model.OrderBy(p => p.CategoriaId))
                 {
                     <div class="col-md-3 col-sm-6">
@@ -92,6 +93,10 @@
                         </span>
                     </div>
                 }
+            }
+            else
+            {
+                <div><span><p>Não exitem produtos cadastrados.</p></span></div>
             }            
         }
 

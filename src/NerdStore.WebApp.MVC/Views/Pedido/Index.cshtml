@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NerdStore.Vendas.Application.Queries.ViewModels.PedidoViewModel>
+﻿@model IEnumerable<PedidoViewModel>
 @{
     ViewData["Title"] = "Index";
 }
@@ -13,7 +13,7 @@
             <h5>Confira o status do seu pedido</h5>
 
             @{
-                if (Model.Any())
+                if (Model != null && Model.Any())
                 {
                     <br><br>
                     <div class="table-responsive-sm">
@@ -66,8 +66,9 @@
                 }
                 else
                 {
-                    <p>Nenhum pedido</p>
+                    <div><span>Não exitem pedidos cadastrados</span></div>
                 }
+               
             }
 
         </div>

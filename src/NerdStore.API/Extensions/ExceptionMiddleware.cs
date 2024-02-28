@@ -11,13 +11,12 @@ namespace NerdStore.API.Extensions
     {
         private readonly RequestDelegate _next;        
 
-        private ICollection<string> Erros { get; set; }
+        private ICollection<string> Erros { get; set; } = new List<string>();
 
 
         public ExceptionMiddleware(RequestDelegate next)
         {
-            _next = next;
-            Erros = new List<string>();
+            _next = next;           
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -107,30 +106,6 @@ namespace NerdStore.API.Extensions
         {
             switch (resultado)
             {
-                case 200:
-                    return new ResponseResult
-                    {
-                        Title = "Opa! Sucesso.",
-                        Status = StatusCodes.Status200OK,
-                        SuccessMessage = exception.Message
-                    };
-
-                case 201:
-                    return new ResponseResult
-                    {
-                        Title = "Opa! Sucesso.",
-                        Status = StatusCodes.Status201Created,
-                        SuccessMessage = exception.Message
-                    };
-
-                case 204:
-                    return new ResponseResult
-                    {
-                        Title = "Opa! Sucesso.",
-                        Status = StatusCodes.Status204NoContent,
-                        SuccessMessage = exception.Message
-                    };
-
                 case 400:
                     return new ResponseResult
                     {
@@ -168,7 +143,7 @@ namespace NerdStore.API.Extensions
                     {
                         Title = "Opa! Ocorreu um erro.",
                         Status = StatusCodes.Status500InternalServerError,
-                        SuccessMessage = "Sistema indisponível. Tente mais tarde."
+                        Errors = new ResponseErrorMessages { Messages = Erros.ToList() }
                     };
             }
 

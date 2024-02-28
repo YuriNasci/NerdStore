@@ -26,7 +26,7 @@ namespace NerdStore.Core.Communication.Mediator
         public async Task PublicarEvento<T>(T evento) where T : Event
         {
             await _mediator.Publish(evento);
-            await _eventSourcingRepository.SalvarEvento(evento);
+            //await _eventSourcingRepository.SalvarEvento(evento);
 
         }
 

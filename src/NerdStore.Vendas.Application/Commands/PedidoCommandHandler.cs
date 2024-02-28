@@ -11,6 +11,7 @@ using NerdStore.Core.Messages.CommonMessages.IntegrationEvents;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Vendas.Application.Events;
 using NerdStore.Vendas.Domain;
+using System;
 
 namespace NerdStore.Vendas.Application.Commands
 {
@@ -36,7 +37,7 @@ namespace NerdStore.Vendas.Application.Commands
         }
 
         public async Task<bool> Handle(AdicionarItemPedidoCommand message, CancellationToken cancellationToken)
-        {
+        {           
             if (!ValidarComando(message)) return false;
 
             var pedido = await _pedidoRepository.ObterPedidoRascunhoPorClienteId(message.ClienteId);

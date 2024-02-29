@@ -11,7 +11,7 @@ using NerdStore.Vendas.Application.Queries.ViewModels;
 
 namespace NerdStore.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/carrinho")]
     public class CarrinhoController : MainController
     {
         private readonly IProdutoAppService _produtoAppService;
@@ -127,7 +127,7 @@ namespace NerdStore.API.Controllers
         {
             var vmCarrinho = await _pedidoQueries.ObterCarrinhoCliente(clientId);
 
-            if (vmCarrinho == null) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Falha ao tentar obter resumo da compra");
+            if (vmCarrinho == null) return ProcessarRespostaMensagem(StatusCodes.Status404NotFound, "Falha ao tentar obter resumo da compra");
 
             return RespostaPersonalizada(vmCarrinho);
         }
@@ -136,7 +136,7 @@ namespace NerdStore.API.Controllers
         [Route("iniciar-pedido")]
         public async Task<IActionResult> IniciarPedido(CarrinhoViewModel request)
         {
-            var vmCarrinho = await _pedidoQueries.ObterCarrinhoCliente(ClienteId);
+            var vmCarrinho = await _pedidoQueries.ObterCarrinhoCliente(ClienteId);            
 
             var command = new IniciarPedidoCommand(vmCarrinho.PedidoId, ClienteId, vmCarrinho.ValorTotal, request.Pagamento.NomeCartao,
                 request.Pagamento.NumeroCartao, request.Pagamento.ExpiracaoCartao, request.Pagamento.CvvCartao);

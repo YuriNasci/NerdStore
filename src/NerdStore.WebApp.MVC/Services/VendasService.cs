@@ -62,7 +62,7 @@ namespace NerdStore.WebApp.MVC.Services
         public async Task<ResponseResult> RemoverItem(Guid id)
         {
             var response = await _httpClient.DeleteAsync($"/api/carrinho/remover-item/{id}");
-            //if (response.StatusCode == HttpStatusCode.NotFound) return null;
+            
             if (!HandlerResponseErrors(response))
             {
                 var result = await DeserializeResponseObject<ResponseResult>(response);
@@ -70,7 +70,7 @@ namespace NerdStore.WebApp.MVC.Services
                 {
                     NotificarErro(result.Status.ToString(), item);
                 }
-                //return null;
+               
             }
             return await DeserializeResponseObject<ResponseResult>(response);
         }
@@ -78,7 +78,7 @@ namespace NerdStore.WebApp.MVC.Services
         public async Task<CarrinhoViewModel> AplicarVoucher(string voucherCodigo)
         {
             var response = await _httpClient.PostAsync($"/api/carrinho/aplicar-voucher/{voucherCodigo}", null);
-            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+            
             if (!HandlerResponseErrors(response))
             {
                 var result = await DeserializeResponseObject<ResponseResult>(response);
@@ -95,7 +95,7 @@ namespace NerdStore.WebApp.MVC.Services
         {
             var content = GetContent(request);
             var response = await _httpClient.PostAsync($"/api/carrinho/iniciar-pedido/", content);
-            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+            
             if (!HandlerResponseErrors(response))
             {
                 var result = await DeserializeResponseObject<ResponseResult>(response);
@@ -111,7 +111,15 @@ namespace NerdStore.WebApp.MVC.Services
         public async Task<CarrinhoViewModel> ResumoDaCompra(Guid clientId)
         {
             var response = await _httpClient.GetAsync($"/api/carrinho/resumo-da-compra/{clientId}");
-            if (response.StatusCode == HttpStatusCode.NotFound) return null;
+            if (!HandlerResponseErrors(response))
+            {
+                var result = await DeserializeResponseObject<ResponseResult>(response);
+                foreach (var item in result.Errors.Messages)
+                {
+                    NotificarErro(result.Status.ToString(), item);
+                }
+                return null;
+            }
             return await DeserializeResponseObject<CarrinhoViewModel>(response);
         }
 
@@ -131,9 +139,9 @@ namespace NerdStore.WebApp.MVC.Services
             return await DeserializeResponseObject<CarrinhoViewModel>(response);
         }
 
-        public async Task<IEnumerable<PedidoViewModel>> ObterPedidosCliente(Guid clientId)
+        public async Task<IEnumerable<PedidoViewModel>> ObterPedidosCliente()
         {
-            var response = await _httpClient.GetAsync($"/api/pedido/meus-pedidos/{clientId}");
+            var response = await _httpClient.GetAsync($"/api/pedido/meus-pedidos");
 
             if (!HandlerResponseErrors(response))
             {

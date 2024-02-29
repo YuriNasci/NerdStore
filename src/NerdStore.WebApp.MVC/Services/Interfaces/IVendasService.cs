@@ -13,7 +13,7 @@ namespace NerdStore.WebApp.MVC.Services.Interfaces
         Task<ResponseResult> AtualizarItem(Guid id, int quantidade);
         Task<CarrinhoViewModel> IniciarPedido(CarrinhoViewModel request);
         Task<CarrinhoViewModel> ObterCarrinhoCliente(Guid clientId);
-        Task<IEnumerable<PedidoViewModel>> ObterPedidosCliente(Guid clientId);
+        Task<IEnumerable<PedidoViewModel>> ObterPedidosCliente();
         Task<ResponseResult> RemoverItem(Guid id);
         Task<CarrinhoViewModel> ResumoDaCompra(Guid clientId);
     }

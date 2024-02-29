@@ -118,7 +118,12 @@
                 }
                 else
                 {
-                    <div><p>Carrinho Vazio</p></div>
+                    <div><p>Seu carrinho está vazio. Continue comprando para encontrar um produto!</p></div>
+                    <div>
+                        <a asp-controller="Vitrine" asp-action="Index" class="btn btn-dark">
+                            <span class="fa fa-shopping-cart"></span>Continuar Compra
+                        </a>
+                    </div>
                 }
             }
         </div>

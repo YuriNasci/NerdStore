@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NerdStore.Core.Communication;
 using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.WebApp.MVC.Models;
@@ -25,7 +27,8 @@ namespace NerdStore.WebApp.MVC.Controllers
         [Route("meu-carrinho")]
         public async Task<IActionResult> Index()
         {
-            return View(await _vendasService.ObterCarrinhoCliente(ClienteId));
+            var response = await _vendasService.ObterCarrinhoCliente(ClienteId);            
+            return View(response);
         }
 
         [HttpPost]        
@@ -35,7 +38,7 @@ namespace NerdStore.WebApp.MVC.Controllers
             if (!ModelState.IsValid) return BadRequest();
             
             var response = await _vendasService.AdicionarItem(id, quantidade);
-            if (response == null) return BadRequest(); 
+            if (response == null) return RedirectToAction("Error", "Home", new { id = StatusCodes.Status400BadRequest}); 
 
             if (!OperacaoValida())
             {
@@ -52,12 +55,12 @@ namespace NerdStore.WebApp.MVC.Controllers
         public async Task<IActionResult> RemoverItem(Guid id)
         {
             var response = await _vendasService.RemoverItem(id);
-            if (response == null) return BadRequest();          
+            if (response == null) return RedirectToAction("Error", "Home", new { id = StatusCodes.Status400BadRequest });
 
             if (!OperacaoValida())
             {
-                TempData["Erros"] = ObterNotificacoesErro();
-                return RedirectToAction("Index");
+                //TempData["Erros"] = ObterNotificacoesErro();
+                return View("Index", await _vendasService.ObterCarrinhoCliente(ClienteId));
             }
 
             TempData["Sucesso"] = response.SuccessMessage;
@@ -69,7 +72,7 @@ namespace NerdStore.WebApp.MVC.Controllers
         public async Task<IActionResult> AtualizarItem(Guid id, int quantidade)
         {
             var response = await _vendasService.AtualizarItem(id, quantidade);
-            if (response == null) return BadRequest();           
+            if (response == null) return RedirectToAction("Error", "Home", new { id = StatusCodes.Status400BadRequest });
 
             if (!OperacaoValida())
             {
@@ -86,14 +89,16 @@ namespace NerdStore.WebApp.MVC.Controllers
         public async Task<IActionResult> AplicarVoucher(string voucherCodigo)
         {
             var response = await _vendasService.AplicarVoucher(voucherCodigo);
-            if (response == null) return BadRequest();           
+            if (response == null) return View("Index", await _vendasService.ObterCarrinhoCliente(ClienteId));           
 
             if (!OperacaoValida())
             {
+                TempData["Erros"] = ObterNotificacoesErro();
                 return RedirectToAction("Index");
             }
 
-            return View("Index", await _vendasService.ObterCarrinhoCliente(ClienteId));
+            TempData["Sucesso"] = ObterNotificacoesErro();
+            return View("Index", response);
         }
 
         [HttpGet]
@@ -101,7 +106,7 @@ namespace NerdStore.WebApp.MVC.Controllers
         public async Task<IActionResult> ResumoDaCompra()
         {
             var response = await _vendasService.ResumoDaCompra(ClienteId);
-            if (response == null) return BadRequest();
+            if (response == null) return View("Index", await _vendasService.ObterCarrinhoCliente(ClienteId));
 
             return View(response);
         }
@@ -115,10 +120,11 @@ namespace NerdStore.WebApp.MVC.Controllers
 
             if (!OperacaoValida())
             {
-                return RedirectToAction("Index", "Pedido");
+                return View("ResumoDaCompra", await _vendasService.ObterCarrinhoCliente(ClienteId));
             }
 
-            return View("ResumoDaCompra", response);
+            return RedirectToAction("Index", "Pedido");
+            
         }
     }
 }

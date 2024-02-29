@@ -80,13 +80,11 @@ namespace NerdStore.Catalogo.Domain.Tests
             Assert.Equal(novaCategoria.Id, produto.CategoriaId);
         }
 
-
         [Fact]
         public void Produto_AlterarDescricao_DeveAlterarDescricaoDoProduto()
         {
             var produto = new Produto("Nome", "Descricao", true, 100, Guid.NewGuid(), DateTime.Now, "Imagem", new Dimensoes(1, 1, 1));
             var novaDescricao = "Nova Descrição";
-
 
             produto.AlterarDescricao(novaDescricao);
 
@@ -128,5 +126,29 @@ namespace NerdStore.Catalogo.Domain.Tests
             Assert.Throws<DomainException>(() => produto.DebitarEstoque(quantidadeDebitada));
         }
 
+        [Fact]
+        public void Produto_AlterarAtributoCategoria_DeveAtualizarAtributoDaCategoria()
+        {
+            var categoriaAntiga = new Categoria("Categoria Antiga", 123);
+            var categoriaNova = new Categoria("Nova Categoria", 456);
+            var produto = new Produto("Camisa Nerd", "Camisa com estampa de super-heróis", true, 80, categoriaAntiga.Id, DateTime.Now, "camisa_nerd.jpg", new Dimensoes(30, 20, 2));
+
+            produto.AlterarCategoria(categoriaNova);
+
+            Assert.Equal(categoriaNova, produto.Categoria);
+            Assert.Equal(categoriaNova.Id, produto.CategoriaId);
+        }
+
+        [Fact]
+        public void Produto_AssociarCategoria_DeveAssociarCategoriaAoProduto()
+        {
+            var categoria = new Categoria("Camisas de Nerd", 456);
+            var produto = new Produto("Camisa Nerd", "Camisa com estampa de super-heróis", true, 80, categoria.Id, DateTime.Now, "camisa_nerd.jpg", new Dimensoes(30, 20, 2));
+
+            produto.AlterarCategoria(categoria);
+
+            Assert.Equal(categoria, produto.Categoria);
+            Assert.Equal(categoria.Id, produto.CategoriaId);
+        }
     }
 }

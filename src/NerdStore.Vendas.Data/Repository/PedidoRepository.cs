@@ -88,7 +88,9 @@ namespace NerdStore.Vendas.Data.Repository
 
         public async Task<Voucher> ObterVoucherPorCodigo(string codigo)
         {
-            return await _context.Vouchers.FirstOrDefaultAsync(p => p.Codigo == codigo);
+            return await (from v in _context.Vouchers
+                                 where v.Codigo == codigo
+                                 select v).FirstOrDefaultAsync();
         }
 
         public void Dispose()

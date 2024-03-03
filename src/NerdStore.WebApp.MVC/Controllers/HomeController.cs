@@ -1,11 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NerdStore.WebApp.MVC.Models;
+using NerdStore.WebApp.MVC.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace NerdStore.WebApp.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        [Route("sistema-indisponivel")]
+        private readonly ICatalogoService _catalogoService;
+
+        public HomeController(ICatalogoService catalogoService)
+        {
+            _catalogoService = catalogoService;
+        }
+
+        [HttpGet]
+		[Route("")]
+		[Route("home")]
+		public async Task<IActionResult> Index()
+		{
+            var produtos = await _catalogoService.ObterTodos();
+            return View(produtos);
+        }
+
+		[HttpGet]
+		[Route("sistema-indisponivel")]
         public IActionResult SistemaIndisponivel()
         {
             var modelErro = new ErrorViewModel
@@ -18,7 +37,8 @@ namespace NerdStore.WebApp.MVC.Controllers
             return View("Error", modelErro);
         }
 
-        [Route("erro/{id:length(3,3)}")]
+		[HttpGet]
+		[Route("erro/{id:length(3,3)}")]
         public IActionResult Error(int id)
         {
             var vmErro = new ErrorViewModel();

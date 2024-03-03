@@ -2,130 +2,125 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-10 col-md-offset-1">
+<!--//////////////////////////////////////////////////-->
+<!--///////////////////Cart Page//////////////////////-->
+<!--//////////////////////////////////////////////////-->
+<div id="page-content" class="single-page">
+    <div class="container">
 
-            <vc:summary />
+        <vc:summary />
 
-            @{
-                if (Model?.Items != null)
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="breadcrumb">
+                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-controller="Carrinho" asp-action="Index">Cart</a></li>
+                </ul>
+            </div>
+        </div>
+
+        @{
+            if (Model.Items != null && Model.Items.Any())
+            {
+
+                foreach (var item in Model.Items.OrderBy(x => x.ProdutoNome))
                 {
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Produto</th>
-                                <th>Quantidade</th>
-                                <th class="text-center">Valor</th>
-                                <th class="text-center">Valor Total</th>
-                                <th> </th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="row">
+                        <div class="product well">
+                            <div class="col-md-3">
+                                <div class="image">
+                                    <img src="~/images/galaxy-note.jpg" />
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="caption">
+                                    <div class="name"><h3><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@item.ProdutoId">@item.ProdutoNome</a></h3></div>
+                                    <div class="info">
+                                        <ul>
+                                            <li>ID: @item.ProdutoId</li>
+                                        </ul>
+                                    </div>
+                                    <div class="price"><span>@item.ValorUnitario.ToString("C")</span></div>
+                                    <div class="price"><span>@item.ValorTotal.ToString("C")</span></div>
 
-                            @{
-                                foreach (var item in Model.Items)
-                                {
-                                    <tr>
-                                        <td class="col-sm-5 col-md-5">
-                                            <div class="media">
-                                                <div class="media-body">
-                                                    <h4 class="media-heading"><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@item.ProdutoId">@item.ProdutoNome</a></h4>
-                                                </div>
-                                            </div>
-                                        </td>
+                                    <form method="post" asp-controller="Carrinho" asp-action="AtualizarItem" asp-route-id="@item.ProdutoId">
 
-                                        <td class="col-sm-2 col-md-2" style="text-align: center">
-                                            <form method="post" asp-controller="Carrinho" asp-action="AtualizarItem">
-                                                <input type="hidden" id="Id" name="Id" value="@item.ProdutoId" />
-                                                <div class="row" style="float: left">
-                                                    <input style="width: 70px" type="text" class="form-control" name="quantidade" id="quantidade" value="@item.Quantidade">
-                                                </div>
-                                                <div class="row" style="float: right">
-                                                    <button type="submit" class="btn btn-success">
-                                                        <span class="fas fa-sync"></span>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </td>
-                                        <td class="col-sm-1 col-md-1 text-center"><strong>@item.ValorUnitario.ToString("C")</strong></td>
-                                        <td class="col-sm-1 col-md-1 text-center"><strong>@item.ValorTotal.ToString("C")</strong></td>
-
-                                        <td class="col-sm-1 col-md-1">
-                                            <form method="post" asp-controller="Carrinho" asp-action="RemoverItem">
-                                                <input type="hidden" id="Id" name="Id" value="@item.ProdutoId" />
-                                                <button type="submit" class="btn btn-danger">
-                                                    <span class="fas fa-trash-alt"></span> Remover
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-
-                            <tr>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td><h5>Subtotal</h5></td>
-                                <td class="text-right"><h5><strong>@Model.SubTotal.ToString("C")</strong></h5></td>
-                            </tr>
-                            <tr>
-                                <td> </td>
-                                <td colspan="2">
-                                    <form method="post" asp-controller="Carrinho" asp-action="AplicarVoucher">
-                                        <div class="row" style="float: left">
-                                            <input placeholder="Voucher" style="width: 150px" type="text" class="form-control" name="VoucherCodigo" id="VoucherCodigo" value="@Model.VoucherCodigo">
-                                        </div>
-                                        <div class="row" style="float: right">
-                                            <button type="submit" class="btn btn-success">
-                                                <span class="fas fa-sync"></span>
+                                        <div class="row">
+                                            <input type="hidden" id="Id" name="Id" value="@item.ProdutoId" />
+                                        <label style="float: left; padding-left: 15px;">Qty: </label> <input name="quantidade" class="form-inline quantity" type="text" value="@item.Quantidade" style="float: left">
+                                            <button type="submit" class="btn btn-success ml-4" style="float: left">
+                                                <span class="glyphicon glyphicon-refresh"></span>
                                             </button>
                                         </div>
                                     </form>
-                                </td>
-                                <td><h5>Desconto</h5></td>
-                                <td class="text-right"><h5><strong>@Model.ValorDesconto.ToString("C")</strong></h5></td>
-                            </tr>
-                            <tr>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td>
-                                    <h3>Total</h3>
-                                </td>
-                                <td class="text-right">
-                                    <h3><strong>@Model.ValorTotal.ToString("C")</strong></h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td> </td>
-                                <td> </td>
-                                <td> </td>
-                                <td>
-                                    <a asp-controller="Vitrine" asp-action="Index" class="btn btn-dark">
-                                        <span class="fa fa-shopping-cart"></span>Continuar Compra
-                                    </a>
-                                </td>
-                                <td>
-                                    <a asp-controller="Carrinho" asp-action="ResumoDaCompra" class="btn btn-success">
-                                        <span class="fas fa-play"></span><br /> Finalizar Compra
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <div><p>Seu carrinho está vazio. Continue comprando para encontrar um produto!</p></div>
-                    <div>
-                        <a asp-controller="Vitrine" asp-action="Index" class="btn btn-dark">
-                            <span class="fa fa-shopping-cart"></span>Continuar Compra
-                        </a>
+                                    <hr>
+                                    <form method="post" asp-controller="Carrinho" asp-action="RemoverItem" asp-route-id="@item.ProdutoId">
+                                        <button type="submit" class="btn btn-danger pull-right">
+                                            <span class="glyphicon glyphicon-square-remove"></span> Excluir
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
                     </div>
+
                 }
             }
+
+        }
+        <div class="row mt-2 p-0">
+            <div class="col-md-4 col-md-offset-8 ">
+                <div> <a asp-controller="Vitrine" asp-action="Index" class="btn btn-danger" style="float: right">Continuar Compra</a></div>
+            </div>
+        </div>
+        <div class="row pr-0">
+            <div class="col-md-4 col-md-offset-8">
+                <center> 
+                    <form method="post" asp-controller="Carrinho" asp-action="AplicarVoucher">
+                        <div class="row" style="float: left">
+                            <input placeholder="Voucher" style="width: 150px" type="text" class="form-control" name="VoucherCodigo" id="VoucherCodigo" value="@Model.VoucherCodigo">
+                        </div>
+                        <div class="row" style="float: right">
+                            <button type="submit" class="btn btn-success">
+                                <span>Aplicar Voucher</span>
+                            </button>
+                        </div>
+                    </form>
+                </center>
+            </div>
+        </div>
+        <div class="row">
+            <div class="pricedetails">
+                <div class="col-md-4 col-md-offset-8">
+                    <table>
+                        <h6>Detalhes</h6>
+                        <tr>
+                            <td>Total</td>
+                            <td>@Model.SubTotal.ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td>Discount</td>
+                            @if (@Model.ValorDesconto == 0)
+                            {
+                                <td>-----</td>
+                            }else
+                            {
+                                <td>@Model.ValorDesconto</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Delivery Charges</td>
+                            <td>-----</td>
+                        </tr>
+                        <tr style="border-top: 1px solid #333">
+                            <td><h5>TOTAL</h5></td>
+                            <td>@Model.ValorTotal.ToString("C")</td>
+                        </tr>
+                    </table>
+                    <center> <a asp-controller="Carrinho" asp-action="ResumoDaCompra" class="btn btn-success">Finalizar Compra</a></center>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</div>	

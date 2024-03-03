@@ -13,6 +13,42 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Views\Vitrine\_Detalhe.cshtml" />
+	  <Content Remove="Views\Vitrine\_Vitrine.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\font-awesome\fonts\fontawesome-webfont.svg" />
+	  <None Include="wwwroot\font-awesome\less\bordered-pulled.less" />
+	  <None Include="wwwroot\font-awesome\less\core.less" />
+	  <None Include="wwwroot\font-awesome\less\fixed-width.less" />
+	  <None Include="wwwroot\font-awesome\less\font-awesome.less" />
+	  <None Include="wwwroot\font-awesome\less\icons.less" />
+	  <None Include="wwwroot\font-awesome\less\larger.less" />
+	  <None Include="wwwroot\font-awesome\less\list.less" />
+	  <None Include="wwwroot\font-awesome\less\mixins.less" />
+	  <None Include="wwwroot\font-awesome\less\path.less" />
+	  <None Include="wwwroot\font-awesome\less\rotated-flipped.less" />
+	  <None Include="wwwroot\font-awesome\less\spinning.less" />
+	  <None Include="wwwroot\font-awesome\less\stacked.less" />
+	  <None Include="wwwroot\font-awesome\less\variables.less" />
+	  <None Include="wwwroot\font-awesome\scss\font-awesome.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_bordered-pulled.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_core.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_fixed-width.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_icons.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_larger.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_list.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_mixins.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_path.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_rotated-flipped.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_spinning.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_stacked.scss" />
+	  <None Include="wwwroot\font-awesome\scss\_variables.scss" />
+	  <None Include="wwwroot\fonts\glyphicons-halflings-regular.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 		<PackageReference Include="Grpc.Core.Api" Version="2.61.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
@@ -28,10 +64,6 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
 		<PackageReference Include="Polly" Version="7.2.4" />
 		<PackageReference Include="Refit" Version="7.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="wwwroot\Images\" />
 	</ItemGroup>
 
 	<ItemGroup>

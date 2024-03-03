@@ -14,8 +14,7 @@ namespace NerdStore.WebApp.MVC.Controllers
             _catalogoService = catalogoService;
         }
 
-        [HttpGet]
-        [Route("")]
+        [HttpGet]        
         [Route("vitrine")]
         public async Task<IActionResult> Index()
         {
@@ -27,7 +26,8 @@ namespace NerdStore.WebApp.MVC.Controllers
         [Route("produto-detalhe/{id}")]
         public async Task<IActionResult> ProdutoDetalhe(Guid id)
         {
-            return View(await _catalogoService.ObterPorId(id));
+            var produto = await _catalogoService.ObterPorId(id);
+            return View("ProdutoDetalhe", produto);
         }
     }
 }

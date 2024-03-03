@@ -7,7 +7,7 @@
 
     <vc:summary />
 
-    <div class="row">
+    <div class="row mb-4">
 
         @{
             if (Model != null && Model.Items.Any())
@@ -81,8 +81,8 @@
                                 <input asp-for="Pagamento.CvvCartao" type="text" class="form-control" placeholder="" required="">
                             </div>
                         </div>
-                        <hr class="mb-4">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Finalizar Compra</button>
+                        <hr>
+                        <button class="btn btn-primary btn-lg btn-block mb-4" type="submit">Finalizar Compra</button>
                     </form>
                 </div>
             }

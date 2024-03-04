@@ -1,14 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NerdStore.WebApp.MVC.Setup;
-using NerdStore.WebApp.MVC.Areas.Identity.Data;
 using NerdStore.WebApp.MVC.Extensions;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
@@ -43,31 +40,16 @@ namespace NerdStore.WebApp.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();            
-
-            services.AddRazorPages();
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString(ContextConstants.DB_CONNECTION_NAME)));                       
+            services.AddMvcConfiguration();                               
 
             services.AddDbContext<VendasContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(ContextConstants.DB_CONNECTION_NAME)));            
-
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+                options.UseSqlServer(Configuration.GetConnectionString(ContextConstants.DB_CONNECTION_NAME)));  
 
             services.AddIdentityConfiguration(Configuration);
 
             services.AddMediatR(typeof(Startup));
 
-            services.RegisterServices();
+            services.ResolveDependencies();
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -91,6 +73,7 @@ namespace NerdStore.WebApp.MVC
             app.UseRouting();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseMiddleware<ExceptionMiddleware>();
             app.SeedIdentityData(Configuration);
             
@@ -106,11 +89,7 @@ namespace NerdStore.WebApp.MVC
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                //endpoints.MapControllerRoute(
-                //    name: "carrinho",
-                //    pattern: "{controller=Carrinho}/{action=AdicionarItem}/{id?}/{quantidade?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");                
 
                 endpoints.MapRazorPages();
 

@@ -15,6 +15,8 @@ using System.Globalization;
 using Microsoft.AspNetCore.HttpOverrides;
 using NerdStore.Core.Extensions;
 using NerdStore.Vendas.Data;
+using NerdStore.WebApp.MVC.Areas.Data.Extensions;
+using NerdStore.Vendas.Data.Constants;
 
 namespace NerdStore.WebApp.MVC
 {
@@ -52,22 +54,16 @@ namespace NerdStore.WebApp.MVC
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            //services.AddDbContext<CatalogoContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString(ContextConstants.DB_CONNECTION_NAME)));                       
 
             services.AddDbContext<VendasContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString(ContextConstants.DB_CONNECTION_NAME)));            
 
-            //services.AddDbContext<PagamentoContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();            
-
-            //services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
+            services.AddIdentityConfiguration(Configuration);
 
             services.AddMediatR(typeof(Startup));
 
@@ -96,6 +92,7 @@ namespace NerdStore.WebApp.MVC
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseMiddleware<ExceptionMiddleware>();
+            app.SeedIdentityData(Configuration);
             
             var supportedCultures = new[] { new CultureInfo("pt-BR") };
             app.UseRequestLocalization(new RequestLocalizationOptions

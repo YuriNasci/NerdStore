@@ -1,76 +1,73 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<UserSecretsId>aspnet-NerdStore.WebApp.MVC-2ACCA1BA-34C8-417D-91C4-C8D4027D9AF3</UserSecretsId>
-		<CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
-	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Controllers\CarrinhoController-copia.cs" />
-	  <Compile Remove="Controllers\PedidoController - Cópia.cs" />
-	  <Compile Remove="Controllers\TesteController.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Remove="Views\Vitrine\_Detalhe.cshtml" />
-	  <Content Remove="Views\Vitrine\_Vitrine.cshtml" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="wwwroot\font-awesome\fonts\fontawesome-webfont.svg" />
-	  <None Include="wwwroot\font-awesome\less\bordered-pulled.less" />
-	  <None Include="wwwroot\font-awesome\less\core.less" />
-	  <None Include="wwwroot\font-awesome\less\fixed-width.less" />
-	  <None Include="wwwroot\font-awesome\less\font-awesome.less" />
-	  <None Include="wwwroot\font-awesome\less\icons.less" />
-	  <None Include="wwwroot\font-awesome\less\larger.less" />
-	  <None Include="wwwroot\font-awesome\less\list.less" />
-	  <None Include="wwwroot\font-awesome\less\mixins.less" />
-	  <None Include="wwwroot\font-awesome\less\path.less" />
-	  <None Include="wwwroot\font-awesome\less\rotated-flipped.less" />
-	  <None Include="wwwroot\font-awesome\less\spinning.less" />
-	  <None Include="wwwroot\font-awesome\less\stacked.less" />
-	  <None Include="wwwroot\font-awesome\less\variables.less" />
-	  <None Include="wwwroot\font-awesome\scss\font-awesome.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_bordered-pulled.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_core.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_fixed-width.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_icons.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_larger.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_list.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_mixins.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_path.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_rotated-flipped.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_spinning.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_stacked.scss" />
-	  <None Include="wwwroot\font-awesome\scss\_variables.scss" />
-	  <None Include="wwwroot\fonts\glyphicons-halflings-regular.svg" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-		<PackageReference Include="Grpc.Core.Api" Version="2.61.0" />
-		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.17" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-		<PackageReference Include="Polly" Version="7.2.4" />
-		<PackageReference Include="Refit" Version="7.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\EventSourcing\EventSourcing.csproj" />
-	  <ProjectReference Include="..\NerdStore.Core\NerdStore.Core.csproj" />
-	  <ProjectReference Include="..\NerdStore.Vendas.Application\NerdStore.Vendas.Application.csproj" />
-	  <ProjectReference Include="..\NerdStore.Vendas.Data\NerdStore.Vendas.Data.csproj" />
-	</ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <UserSecretsId>aspnet-NerdStore.WebApp.MVC-2ACCA1BA-34C8-417D-91C4-C8D4027D9AF3</UserSecretsId>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\CarrinhoController-copia.cs" />
+    <Compile Remove="Controllers\PedidoController - Cópia.cs" />
+    <Compile Remove="Controllers\TesteController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Vitrine\_Detalhe.cshtml" />
+    <Content Remove="Views\Vitrine\_Vitrine.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\font-awesome\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\font-awesome\less\bordered-pulled.less" />
+    <None Include="wwwroot\font-awesome\less\core.less" />
+    <None Include="wwwroot\font-awesome\less\fixed-width.less" />
+    <None Include="wwwroot\font-awesome\less\font-awesome.less" />
+    <None Include="wwwroot\font-awesome\less\icons.less" />
+    <None Include="wwwroot\font-awesome\less\larger.less" />
+    <None Include="wwwroot\font-awesome\less\list.less" />
+    <None Include="wwwroot\font-awesome\less\mixins.less" />
+    <None Include="wwwroot\font-awesome\less\path.less" />
+    <None Include="wwwroot\font-awesome\less\rotated-flipped.less" />
+    <None Include="wwwroot\font-awesome\less\spinning.less" />
+    <None Include="wwwroot\font-awesome\less\stacked.less" />
+    <None Include="wwwroot\font-awesome\less\variables.less" />
+    <None Include="wwwroot\font-awesome\scss\font-awesome.scss" />
+    <None Include="wwwroot\font-awesome\scss\_bordered-pulled.scss" />
+    <None Include="wwwroot\font-awesome\scss\_core.scss" />
+    <None Include="wwwroot\font-awesome\scss\_fixed-width.scss" />
+    <None Include="wwwroot\font-awesome\scss\_icons.scss" />
+    <None Include="wwwroot\font-awesome\scss\_larger.scss" />
+    <None Include="wwwroot\font-awesome\scss\_list.scss" />
+    <None Include="wwwroot\font-awesome\scss\_mixins.scss" />
+    <None Include="wwwroot\font-awesome\scss\_path.scss" />
+    <None Include="wwwroot\font-awesome\scss\_rotated-flipped.scss" />
+    <None Include="wwwroot\font-awesome\scss\_spinning.scss" />
+    <None Include="wwwroot\font-awesome\scss\_stacked.scss" />
+    <None Include="wwwroot\font-awesome\scss\_variables.scss" />
+    <None Include="wwwroot\fonts\glyphicons-halflings-regular.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Grpc.Core.Api" Version="2.61.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Polly" Version="7.2.4" />
+    <PackageReference Include="Refit" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EventSourcing\EventSourcing.csproj" />
+    <ProjectReference Include="..\NerdStore.Core\NerdStore.Core.csproj" />
+    <ProjectReference Include="..\NerdStore.Vendas.Application\NerdStore.Vendas.Application.csproj" />
+    <ProjectReference Include="..\NerdStore.Vendas.Data\NerdStore.Vendas.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup Label="seeding">
+    <None Remove="Areas\Identity\Data\Seedings\20240304021234_Add_CargaTeste_Identity.sql" />
+    <EmbeddedResource Include="Areas\Identity\Data\Seedings\20240304021234_Add_CargaTeste_Identity.sql" />
+  </ItemGroup>
 </Project>

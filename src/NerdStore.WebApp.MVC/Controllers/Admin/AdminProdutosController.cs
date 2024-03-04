@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NerdStore.WebApp.MVC.Extensions;
 using NerdStore.WebApp.MVC.Models;
 using NerdStore.WebApp.MVC.Services.Interfaces;
 
 namespace NerdStore.WebApp.MVC.Controllers.Admin
 {
+    [Authorize]
     public class AdminProdutosController : Controller
     {
         private readonly ICatalogoService _catalogoService;
@@ -15,6 +18,7 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             _catalogoService = catalogoService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("admin-produtos")]
         public async Task<IActionResult> Index()
@@ -22,6 +26,7 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             return View(await _catalogoService.ObterTodos());
         }
 
+        [ClaimsAuthorize("Produto", "Adicionar")]
         [HttpGet]
         [Route("novo-produto")]
         public async Task<IActionResult> NovoProduto()
@@ -29,6 +34,7 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             return View(await PopularCategorias(new ProdutoViewModel()));
         }
 
+        [ClaimsAuthorize("Produto", "Adicionar")]
         [HttpPost]
         [Route("novo-produto")]        
         public async Task<IActionResult> NovoProduto(ProdutoViewModel produtoViewModel)
@@ -43,6 +49,7 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             return RedirectToAction("Index");
         }
 
+        [ClaimsAuthorize("Produto", "Editar")]
         [HttpGet]
         [Route("editar-produto")]
         public async Task<IActionResult> AtualizarProduto(Guid id)
@@ -50,6 +57,7 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             return View(await PopularCategorias(await _catalogoService.ObterPorId(id)));
         }
 
+        [ClaimsAuthorize("Produto", "Editar")]
         [HttpPost]
         [Route("editar-produto")]
         public async Task<IActionResult> AtualizarProduto(Guid id, ProdutoViewModel produtoViewModel)
@@ -76,6 +84,7 @@ namespace NerdStore.WebApp.MVC.Controllers.Admin
             return View("Estoque", await _catalogoService.ObterPorId(id));
         }
 
+        [ClaimsAuthorize("Produto", "Editar")]
         [HttpPost]
         [Route("produtos-atualizar-estoque")]
         public async Task<IActionResult> AtualizarEstoque(Guid id, int quantidade)

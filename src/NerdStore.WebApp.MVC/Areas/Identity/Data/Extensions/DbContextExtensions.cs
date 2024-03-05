@@ -127,12 +127,6 @@ namespace NerdStore.WebApp.MVC.Areas.Data.Extensions
                                             ClaimType = "Produto",
                                             ClaimValue = "Leitura"
                                         },
-                                         new IdentityUserClaim<string>()
-                                        {                                            
-                                            UserId = userAdmin.Id,
-                                            ClaimType = "Produto",
-                                            ClaimValue = "AcessoPermitido"
-                                        },
                                         new IdentityUserClaim<string>()
                                         {                                            
                                             UserId = user.Id,

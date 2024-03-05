@@ -116,7 +116,7 @@ header .form-search button:hover {color: #eee;}
 .heading h1, .heading h2{font-size: 30px;padding-bottom: 10px;}
 
 /* ---breadcrumb--- */
-.breadcrumb {margin-bottom: 40px;border: 1px solid #ddd;}
+.breadcrumb {margin-bottom: 0px;border: 1px solid #ddd;}
 .breadcrumb i {font-size: 15px;}
 .breadcrumb > li {text-shadow: 0 1px 0 #FFF;padding: 0 20px;position: relative;white-space: nowrap;}
 .breadcrumb > li + li:before {content: '';padding: 0;}
@@ -148,7 +148,7 @@ header .form-search button:hover {color: #eee;}
 
 .product-desc{margin: 50px 0;}
 
-.pricedetails {margin-top: 20px;}
+.pricedetails {margin-top: 10px;}
 .pricedetails table td {padding-right: 70px;}
 
 

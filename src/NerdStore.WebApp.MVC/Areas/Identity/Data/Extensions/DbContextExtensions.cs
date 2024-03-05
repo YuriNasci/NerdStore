@@ -8,12 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 using NerdStore.WebApp.MVC.Areas.Identity.Data;
 using NerdStore.WebApp.MVC.Constants;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 
 namespace NerdStore.WebApp.MVC.Areas.Data.Extensions
 {
-	public static class DbContextExtensions
+    public static class DbContextExtensions
     {
         public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
@@ -35,8 +37,8 @@ namespace NerdStore.WebApp.MVC.Areas.Data.Extensions
                   });
             });
 
-			services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-				.AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;
 
@@ -49,9 +51,111 @@ namespace NerdStore.WebApp.MVC.Areas.Data.Extensions
                 using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
                 {
                     ArgumentNullException.ThrowIfNull(context, nameof(context));
-                   
+
                     context.Database.Migrate();
-                    
+
+                    if (!context.Users.Any())
+                    {
+                        using (var transaction = context.Database.BeginTransaction())
+                        {
+                            try
+                            {
+                                var users = new List<IdentityUser>();
+
+                                var userAdmin = new IdentityUser()
+                                {
+                                    Id = "b74ddd14-6340-4840-95c2-db12554843e5",
+                                    UserName = "admin@gmail.com",
+                                    NormalizedUserName = "ADMIN@GMAIL.COM",
+                                    Email = "admin@gmail.com",
+                                    NormalizedEmail = "ADMIN@GMAIL.COM",
+                                    LockoutEnabled = false,
+                                    PhoneNumber = "21970851350",
+                                    EmailConfirmed = true
+                                };
+                                var user = new IdentityUser()
+                                {
+                                    Id = "17c6c007-ad05-455f-903e-edbfff4b856b",
+                                    UserName = "usuario@gmail.com",
+                                    NormalizedUserName = "USUARIO@GMAIL.COM",
+                                    Email = "usuario@gmail.com",
+                                    NormalizedEmail = "USUARIO@GMAIL.COM",
+                                    LockoutEnabled = false,
+                                    PhoneNumber = "21970696089",
+                                    EmailConfirmed = true
+                                };
+
+                                PasswordHasher<IdentityUser> hasher1 = new PasswordHasher<IdentityUser>();
+                                userAdmin.PasswordHash = hasher1.HashPassword(userAdmin, "Admin@123");
+
+                                PasswordHasher<IdentityUser> hasher2 = new PasswordHasher<IdentityUser>();
+                                user.PasswordHash = hasher2.HashPassword(user, "Teste@123");
+
+                                users.Add(userAdmin);
+                                users.Add(user);
+
+                                context.Users.AddRange(users);
+                                context.SaveChanges();
+
+                                if (!context.UserClaims.Any())
+                                {
+
+                                    var claims = new List<IdentityUserClaim<string>>()
+                                    {
+
+                                        new IdentityUserClaim<string>()
+                                        {                                            
+                                            UserId = userAdmin.Id,
+                                            ClaimType = "Produto",
+                                            ClaimValue = "Adicionar"
+                                        },
+                                        new IdentityUserClaim<string>()
+                                        {                                           
+                                            UserId = userAdmin.Id,
+                                            ClaimType = "Produto",
+                                            ClaimValue = "Editar"
+                                        },
+                                        new IdentityUserClaim<string>()
+                                        {
+                                            UserId = userAdmin.Id,
+                                            ClaimType = "Produto",
+                                            ClaimValue = "Excluir"
+                                        },
+                                        new IdentityUserClaim<string>()
+                                        {                                            
+                                            UserId = userAdmin.Id,
+                                            ClaimType = "Produto",
+                                            ClaimValue = "Leitura"
+                                        },
+                                         new IdentityUserClaim<string>()
+                                        {                                            
+                                            UserId = userAdmin.Id,
+                                            ClaimType = "Produto",
+                                            ClaimValue = "AcessoPermitido"
+                                        },
+                                        new IdentityUserClaim<string>()
+                                        {                                            
+                                            UserId = user.Id,
+                                            ClaimType = "Produto",
+                                            ClaimValue = "Leitura"
+                                        }
+
+                                    };
+
+                                    context.UserClaims.AddRange(claims);
+                                    context.SaveChanges();
+
+                                    transaction.Commit();
+                                }
+                            }
+                            catch
+                            {
+                                transaction.Rollback();
+                                //throw;
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -114,6 +218,6 @@ namespace NerdStore.WebApp.MVC.Areas.Data.Extensions
                 }
             }
         }
-        
+
     }
 }

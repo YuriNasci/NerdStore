@@ -55,8 +55,8 @@ namespace NerdStore.Catalogo.Data.Extensions
 
 								var produtosEspeciais = new List<Produto> 
                                 {
-                                    new Produto("Camiseta Developer", "Aliquam erat volutpat", true, 99.00M, categoriaCamisa.Id, DateTime.Now, "Camiseta1.jpg", new Dimensoes(5,5,5)),
-                                    new Produto("Camiseta Code", "Aliquam erat volutpat", true, 89.00M, categoriaCamisa.Id, DateTime.Now, "camiseta2.jpg", new Dimensoes(5,5,5)),
+                                    new Produto("Camiseta Developer", "Camiseta 100% algodão", true, 99.00M, categoriaCamisa.Id, DateTime.Now, "Camiseta1.jpg", new Dimensoes(5,5,5)),
+                                    new Produto("Camiseta Code", "Camiseta 100% algodão", true, 89.00M, categoriaCamisa.Id, DateTime.Now, "camiseta2.jpg", new Dimensoes(5,5,5)),
                                     new Produto("Caneca StarBugs", "Aliquam erat volutpat", true, 49.00M, categoriaCaneca.Id, DateTime.Now, "caneca1.jpg", new Dimensoes(5,5,5)),
                                     new Produto("Caneca Code", "Aliquam erat volutpat", true, 45.00M, categoriaCaneca.Id, DateTime.Now, "caneca2.png", new Dimensoes(5,5,5)),
 

@@ -14,7 +14,7 @@ namespace NerdStore.Catalogo.Data.Extensions
 {
     public static class DbContextExtensions
     {
-        public static void AddCatalogoData(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCatalogoData(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString(ContextConstants.DB_CONNECTION_NAME) ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -27,6 +27,8 @@ namespace NerdStore.Catalogo.Data.Extensions
                       x.MigrationsAssembly(typeof(CatalogoContext).Assembly.GetName().Name);
                   });
             });
+
+            return services;
            
         }
 
@@ -45,7 +47,9 @@ namespace NerdStore.Catalogo.Data.Extensions
                         using (var transaction = context.Database.BeginTransaction())
                         {
                             try
-                            {                                
+                            {
+                                var categorias = new List<Categoria>();
+                                
 								var categoriaCamisa = new Categoria("Camisas", 100);
 								var categoriaCaneca = new Categoria("Canecas", 101);
 								var categoriaAdesivo = new Categoria("Adesivos", 102);								
@@ -53,12 +57,22 @@ namespace NerdStore.Catalogo.Data.Extensions
 								var categoriaSmartphone = new Categoria("Smartphone", 104);
 								var categoriaIphone = new Categoria("Iphone", 105);
 
-								var produtosEspeciais = new List<Produto> 
+                                categorias.Add(categoriaCamisa);
+                                categorias.Add(categoriaCaneca);
+                                categorias.Add(categoriaAdesivo);
+                                categorias.Add(categoriaBone);
+                                categorias.Add(categoriaSmartphone);
+                                categorias.Add(categoriaIphone);
+
+                                context.Categorias.AddRange(categorias);
+                                context.SaveChanges();
+
+                                var produtosEspeciais = new List<Produto> 
                                 {
-                                    new Produto("Camiseta Developer", "Aliquam erat volutpat", true, 99.00M, categoriaCamisa.Id, DateTime.Now, "Camiseta1.jpg", new Dimensoes(5,5,5)),
-                                    new Produto("Camiseta Code", "Aliquam erat volutpat", true, 89.00M, categoriaCamisa.Id, DateTime.Now, "camiseta2.jpg", new Dimensoes(5,5,5)),
+                                    new Produto("Camiseta Developer", "Camiseta 100% algodão", true, 99.00M, categoriaCamisa.Id, DateTime.Now, "Camiseta1.jpg", new Dimensoes(5,5,5)),
+                                    new Produto("Camiseta Code", "Camiseta 100% algodão", true, 89.00M, categoriaCamisa.Id, DateTime.Now, "camiseta2.jpg", new Dimensoes(5,5,5)),
                                     new Produto("Caneca StarBugs", "Aliquam erat volutpat", true, 49.00M, categoriaCaneca.Id, DateTime.Now, "caneca1.jpg", new Dimensoes(5,5,5)),
-                                    new Produto("Caneca Code", "Aliquam erat volutpat", true, 45.00M, categoriaCaneca.Id, DateTime.Now, "caneca2.png", new Dimensoes(5,5,5)),
+                                    new Produto("Caneca Code", "Aliquam erat volutpat", true, 45.00M, categoriaCaneca.Id, DateTime.Now, "caneca2.jpg", new Dimensoes(5,5,5)),
 
                                 };
                                 

@@ -33,8 +33,8 @@
 									foreach (var produto in Model.OrderBy(p => p.CategoriaId))
 									{
 										<div class="col-lg-4 col-md-4 col-xs-12">
-											<div class="product">
-												<div class="image"><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img src="~/images/@produto.Imagem" style="height:300px" /></a></div>
+											<center class="product">
+												<div class="image"><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img src="~/images/@produto.Imagem" style="height:280px" /></a></div>
 												<div class="buttons">
 													<a class="btn cart" href="#"><span class="glyphicon glyphicon-shopping-cart"></span></a>
 													<a class="btn wishlist" href="#"><span class="glyphicon glyphicon-heart"></span></a>
@@ -45,7 +45,7 @@
 													<div class="price">@produto.Valor.ToString("C")<span>$98</span></div>
 													<div class="rating"><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star-empty"></span></div>
 												</div>
-											</div>
+											</center>
 										</div>
 									}
 								}

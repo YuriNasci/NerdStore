@@ -146,7 +146,7 @@ header .form-search button:hover {color: #eee;}
 .product .share .share-btn {margin-right: 25px;padding-top: 20px;}
 @media(max-width:767px) {.product{border: none;}}
 
-.product-desc{margin: 50px 0;}
+.product-desc{margin: 0;}
 
 .pricedetails {margin-top: 10px;}
 .pricedetails table td {padding-right: 70px;}

@@ -20,10 +20,11 @@ namespace NerdStore.Vendas.Data.Extensions
             {
                 options.UseSqlServer(connectionString,
                   x =>
-                  {
-                      x.MigrationsHistoryTable("__EFMigrationsHistory");
+                  {					  
+					  x.MigrationsHistoryTable("__EFMigrationsHistory");
                       x.MigrationsAssembly(typeof(VendasContext).Assembly.GetName().Name);
                   });
+
             });
 
         }
@@ -35,10 +36,12 @@ namespace NerdStore.Vendas.Data.Extensions
                 using (var context = serviceScope.ServiceProvider.GetService<VendasContext>())
                 {
                     ArgumentNullException.ThrowIfNull(context, nameof(context));
-                    if (context.Pedidos.Any()) return;
+                   
                     context.Database.Migrate();
 
-                    var assembly = typeof(DbContextExtensions).Assembly;
+					if (context.Pedidos.Any()) return;
+
+					var assembly = typeof(DbContextExtensions).Assembly;
                     var files = assembly.GetManifestResourceNames();
 
                     var executedSeedings = context.SeedingEntries.ToArray();

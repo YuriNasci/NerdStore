@@ -35,10 +35,12 @@ namespace NerdStore.Pagamentos.Data.Extensions
                 using (var context = serviceScope.ServiceProvider.GetService<PagamentoContext>())
                 {
                     ArgumentNullException.ThrowIfNull(context, nameof(context));
-                    if (context.Pagamentos.Any()) return;
+                    
                     context.Database.Migrate();
 
-                    var assembly = typeof(DbContextExtensions).Assembly;
+					if (context.Pagamentos.Any()) return;
+
+					var assembly = typeof(DbContextExtensions).Assembly;
                     var files = assembly.GetManifestResourceNames();
 
                     var executedSeedings = context.SeedingEntries.ToArray();

@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace NerdStore.Catalogo.Data.Extensions
 {
-    public static class DbContextExtensions
+	public static class DbContextExtensions
     {
         public static IServiceCollection AddCatalogoData(this IServiceCollection services, IConfiguration configuration)
         {
@@ -22,8 +22,8 @@ namespace NerdStore.Catalogo.Data.Extensions
             {
                 options.UseSqlServer(connectionString,
                   x =>
-                  {
-                      x.MigrationsHistoryTable("__EFMigrationsHistory");
+                  {					 
+					  x.MigrationsHistoryTable("__EFMigrationsHistory");
                       x.MigrationsAssembly(typeof(CatalogoContext).Assembly.GetName().Name);
                   });
             });
@@ -38,9 +38,9 @@ namespace NerdStore.Catalogo.Data.Extensions
             {
                 using (var context = serviceScope.ServiceProvider.GetService<CatalogoContext>())
                 {
-                    ArgumentNullException.ThrowIfNull(context, nameof(context));
-                   
-                    context.Database.Migrate();
+                    ArgumentNullException.ThrowIfNull(context, nameof(context));					
+
+					context.Database.Migrate();
 
                     if (!context.Produtos.Any())
                     {
@@ -108,7 +108,7 @@ namespace NerdStore.Catalogo.Data.Extensions
                             catch
                             {
                                 transaction.Rollback();
-                                throw;
+                                //throw;
                             }
                         }
                     }

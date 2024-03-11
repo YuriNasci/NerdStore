@@ -10,6 +10,7 @@
     <Compile Remove="Controllers\TesteController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="Views\Carrinho\Index - Cópia.cshtml" />
     <Content Remove="Views\Vitrine\_Detalhe.cshtml" />
     <Content Remove="Views\Vitrine\_Vitrine.cshtml" />
   </ItemGroup>

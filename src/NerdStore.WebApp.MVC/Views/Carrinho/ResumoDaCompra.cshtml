@@ -5,9 +5,10 @@
 
 @* <div class="container"> *@
 
-    <vc:summary />
+<vc:summary />
 
-    <div class="row mb-3">
+<div class="row">
+    <div class="col-md-12" style="margin-bottom:20px">
 
         @{
             if (Model != null && Model.Items.Any())
@@ -88,9 +89,14 @@
             }
             else
             {
-                <div><p>Carrinho Vazio</p></div>
+                <center class="col-sm-12">
+                    <div class="alert alert-light" role="alert">
+                        <p>Opa! Não existem dados para exibir.</p>
+                    </div>
+                </center>
             }
         }
 
     </div>
+</div>
 @* </div> *@

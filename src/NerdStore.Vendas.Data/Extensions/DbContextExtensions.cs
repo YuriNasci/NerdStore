@@ -29,7 +29,7 @@ namespace NerdStore.Vendas.Data.Extensions
 
         }
 
-        public static void SeedVendasData(this IApplicationBuilder app, IConfiguration configuration)
+        public static void SeedVendasFromScripts(this IApplicationBuilder app, IConfiguration configuration)
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {

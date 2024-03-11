@@ -124,10 +124,12 @@ namespace NerdStore.Catalogo.Data.Extensions
                 using (var context = serviceScope.ServiceProvider.GetService<CatalogoContext>())
                 {
                     ArgumentNullException.ThrowIfNull(context, nameof(context));
-                    if (context.Produtos.Any()) return;
+                    
                     context.Database.Migrate();
 
-                    var assembly = typeof(DbContextExtensions).Assembly;
+					if (context.Produtos.Any()) return;
+
+					var assembly = typeof(DbContextExtensions).Assembly;
                     var files = assembly.GetManifestResourceNames();
 
                     var executedSeedings = context.SeedingEntries.ToArray();
@@ -167,7 +169,7 @@ namespace NerdStore.Catalogo.Data.Extensions
                             catch
                             {
                                 transaction.Rollback();
-                                throw;
+                                //throw;
                             }
                         }
 

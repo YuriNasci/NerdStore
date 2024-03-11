@@ -26,8 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.SeedCatalogoData(app.Configuration);
-    app.SeedVendasData(app.Configuration);
-    app.SeedPagamentosData(app.Configuration);
+    app.SeedVendasFromScripts(app.Configuration);
+    app.SeedPagamentosFromScripts(app.Configuration);
 }
 
 var supportedCultures = new[] { new CultureInfo("pt-BR") };

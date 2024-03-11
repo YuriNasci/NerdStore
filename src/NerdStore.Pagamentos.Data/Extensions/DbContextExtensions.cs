@@ -28,7 +28,7 @@ namespace NerdStore.Pagamentos.Data.Extensions
 
         }
 
-        public static void SeedPagamentosData(this IApplicationBuilder app, IConfiguration configuration)
+        public static void SeedPagamentosFromScripts(this IApplicationBuilder app, IConfiguration configuration)
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {

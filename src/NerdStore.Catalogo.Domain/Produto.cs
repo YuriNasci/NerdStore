@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using NerdStore.Core.DomainObjects;
 
 namespace NerdStore.Catalogo.Domain
@@ -17,20 +18,25 @@ namespace NerdStore.Catalogo.Domain
         public Categoria Categoria { get; private set; }
 
         protected Produto() { }
-        public Produto(string nome, 
-                       string descricao, 
-                       bool ativo, 
-                       decimal valor, 
-                       Guid categoriaId, 
-                       DateTime dataCadastro, 
-                       string imagem, 
+
+        public Produto(string nome, decimal preco) : this(nome, "", true, preco, Guid.NewGuid(), DateTime.Now, "", null)
+        {
+        }
+
+        public Produto(string nome,
+                       string descricao,
+                       bool ativo,
+                       decimal valor,
+                       Guid categoriaId,
+                       DateTime dataCadastro,
+                       string imagem,
                        Dimensoes dimensoes)
         {
-            CategoriaId = categoriaId;
             Nome = nome;
             Descricao = descricao;
             Ativo = ativo;
             Valor = valor;
+            CategoriaId = categoriaId;
             DataCadastro = dataCadastro;
             Imagem = imagem;
             Dimensoes = dimensoes;
@@ -57,7 +63,7 @@ namespace NerdStore.Catalogo.Domain
         public void DebitarEstoque(int quantidade)
         {
             if (quantidade < 0) quantidade *= -1;
-            if (!PossuiEstoque(quantidade)) throw new DomainException("Estoque insuficiente");
+            if (!PossuiEstoque(quantidade)) throw new DomainException("Estoque insuficiente", HttpStatusCode.BadRequest);
             QuantidadeEstoque -= quantidade;
         }
 
@@ -80,4 +86,5 @@ namespace NerdStore.Catalogo.Domain
             Validacoes.ValidarSeVazio(Imagem, "O campo Imagem do produto não pode estar vazio");
         }
     }
+
 }

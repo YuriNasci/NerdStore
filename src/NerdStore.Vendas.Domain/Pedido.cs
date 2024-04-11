@@ -45,8 +45,16 @@ namespace NerdStore.Vendas.Domain
             var validationResult = voucher.ValidarSeAplicavel();
             if (!validationResult.IsValid) return validationResult;
 
+            // Verifica se o voucher já foi utilizado
+            if (VoucherUtilizado && VoucherId == voucher.Id)
+            {
+                validationResult.Errors.Add(new ValidationFailure("", "Este voucher já foi aplicado anteriormente no pedido."));
+                return validationResult;
+            }
+
             Voucher = voucher;
             VoucherUtilizado = true;
+            VoucherId = voucher.Id; // Atualiza o Id do voucher aplicado
             CalcularValorPedido();
 
             return validationResult;

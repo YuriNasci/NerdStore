@@ -8,21 +8,21 @@ namespace NerdStore.Vendas.Domain
 {
     public class Voucher : Entity
     {
-        public string Codigo { get; private set; }
-        public decimal? Percentual { get; private set; }
-        public decimal? ValorDesconto { get; private set; }
-        public int Quantidade { get; private set; }
-        public TipoDescontoVoucher TipoDescontoVoucher { get; private set; }
-        public DateTime DataCriacao { get; private set; }
-        public DateTime? DataUtilizacao { get; private set; }
-        public DateTime DataValidade { get; private set; }
-        public bool Ativo { get; private set; }
-        public bool Utilizado { get; private set; }
+        public string Codigo { get; set; }
+        public decimal? Percentual { get; set; }
+        public decimal? ValorDesconto { get; set; }
+        public int Quantidade { get; set; }
+        public TipoDescontoVoucher TipoDescontoVoucher { get; set; }
+        public DateTime DataCriacao { get; set; }
+        public DateTime? DataUtilizacao { get; set; }
+        public DateTime DataValidade { get; set; }
+        public bool Ativo { get; set; }
+        public bool Utilizado { get; set; }
 
         // EF Rel.
         public ICollection<Pedido> Pedidos { get; set; }
 
-        internal ValidationResult ValidarSeAplicavel()
+        public ValidationResult ValidarSeAplicavel()
         {
             return new VoucherAplicavelValidation().Validate(this);
         }
@@ -30,7 +30,6 @@ namespace NerdStore.Vendas.Domain
 
     public class VoucherAplicavelValidation : AbstractValidator<Voucher>
     {
-
         public VoucherAplicavelValidation()
         {
             RuleFor(c => c.DataValidade)

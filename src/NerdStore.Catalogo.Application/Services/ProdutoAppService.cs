@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using NerdStore.Catalogo.Application.ViewModels;
@@ -43,27 +44,27 @@ namespace NerdStore.Catalogo.Application.Services
             return _mapper.Map<IEnumerable<CategoriaViewModel>>(await _produtoRepository.ObterCategorias());
         }
 
-        public async Task AdicionarProduto(ProdutoViewModel produtoViewModel)
+        public async Task<bool> AdicionarProduto(ProdutoViewModel produtoViewModel)
         {
-            var produto = _mapper.Map<Produto>(produtoViewModel);
+            var produto = _mapper.Map<Produto>(produtoViewModel);            
             _produtoRepository.Adicionar(produto);
 
-            await _produtoRepository.UnitOfWork.Commit();
+            return await _produtoRepository.UnitOfWork.Commit();
         }
 
-        public async Task AtualizarProduto(ProdutoViewModel produtoViewModel)
+        public async Task<bool> AtualizarProduto(ProdutoViewModel produtoViewModel)
         {
             var produto = _mapper.Map<Produto>(produtoViewModel);
             _produtoRepository.Atualizar(produto);
 
-            await _produtoRepository.UnitOfWork.Commit();
+            return await _produtoRepository.UnitOfWork.Commit();
         }
 
         public async Task<ProdutoViewModel> DebitarEstoque(Guid id, int quantidade)
         {
             if (!_estoqueService.DebitarEstoque(id, quantidade).Result)
             {
-                throw new DomainException("Falha ao debitar estoque");
+                throw new DomainException("Falha ao debitar estoque", HttpStatusCode.BadRequest);
             }
 
             return _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterPorId(id));
@@ -73,7 +74,7 @@ namespace NerdStore.Catalogo.Application.Services
         {
             if (!_estoqueService.ReporEstoque(id, quantidade).Result)
             {
-                throw new DomainException("Falha ao repor estoque");
+                throw new DomainException("Falha ao repor estoque", HttpStatusCode.BadRequest);
             }
 
             return _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterPorId(id));

@@ -6,13 +6,14 @@ using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Data;
 using NerdStore.Core.Messages;
 using NerdStore.Vendas.Domain;
+using NerdStore.Vendas.Data.Extensions;
+using NerdStore.Vendas.Data.Entities;
 
 namespace NerdStore.Vendas.Data
 {
     public class VendasContext : DbContext, IUnitOfWork
     {
-        private readonly IMediatorHandler _mediatorHandler;
-
+        private readonly IMediatorHandler _mediatorHandler;       
 
         public VendasContext(DbContextOptions<VendasContext> options, IMediatorHandler mediatorHandler)
             : base(options)
@@ -20,9 +21,10 @@ namespace NerdStore.Vendas.Data
             _mediatorHandler = mediatorHandler;
         }
 
-        public DbSet<Pedido> Pedidos { get; set; }
-        public DbSet<PedidoItem> PedidoItems { get; set; }
-        public DbSet<Voucher> Vouchers { get; set; }
+        public virtual DbSet<Pedido> Pedidos { get; set; }
+        public virtual DbSet<PedidoItem> PedidoItems { get; set; }
+        public virtual DbSet<Voucher> Vouchers { get; set; }
+        internal virtual DbSet<SeedingEntry> SeedingEntries { get; set; }
 
 
         public async Task<bool> Commit()

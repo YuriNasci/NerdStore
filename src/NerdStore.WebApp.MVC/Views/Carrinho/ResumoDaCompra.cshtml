@@ -1,16 +1,17 @@
-﻿@model NerdStore.Vendas.Application.Queries.ViewModels.CarrinhoViewModel
+﻿@model CarrinhoViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<div class="container">
+@* <div class="container"> *@
 
-    <vc:summary />
+<vc:summary />
 
-    <div class="row">
+<div class="row">
+    <div class="col-md-12" style="margin-bottom:20px">
 
         @{
-            if (Model.Items.Any())
+            if (Model != null && Model.Items.Any())
             {
                 <div class="col-md-4 order-md-2 mb-4">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -81,16 +82,21 @@
                                 <input asp-for="Pagamento.CvvCartao" type="text" class="form-control" placeholder="" required="">
                             </div>
                         </div>
-                        <hr class="mb-4">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Finalizar Compra</button>
+                        <hr>
+                        <button class="btn btn-primary btn-lg btn-block mb-4" type="submit">Finalizar Compra</button>
                     </form>
                 </div>
             }
             else
             {
-                <div><p>Carrinho Vazio</p></div>
+                <center class="col-sm-12">
+                    <div class="alert alert-light" role="alert">
+                        <p>Opa! Não existem dados para exibir.</p>
+                    </div>
+                </center>
             }
         }
 
     </div>
 </div>
+@* </div> *@

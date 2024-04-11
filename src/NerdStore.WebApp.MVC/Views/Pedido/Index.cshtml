@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NerdStore.Vendas.Application.Queries.ViewModels.PedidoViewModel>
+﻿@model IEnumerable<PedidoViewModel>
 @{
     ViewData["Title"] = "Index";
 }
@@ -13,7 +13,7 @@
             <h5>Confira o status do seu pedido</h5>
 
             @{
-                if (Model.Any())
+                if (Model != null && Model.Any())
                 {
                     <br><br>
                     <div class="table-responsive-sm">
@@ -55,7 +55,7 @@
                                                 </h4>
                                             </td>
                                             <td>@pedido.ValorTotal.ToString("C")</td>
-                                            <td><a class="btn btn-info" asp-controller="Eventos" asp-action="Index" asp-route-id="@pedido.Id"><span class="far fa-clock"></span></a></td>
+                                            <td><a class="btn btn-info" asp-controller="Eventos" asp-action="Index" asp-route-id="@pedido.Id"><span class="glyphicon glyphicon-time"></span></a></td>
                                         </tr>
                                     }
                                 }
@@ -66,8 +66,13 @@
                 }
                 else
                 {
-                    <p>Nenhum pedido</p>
+                    <center class="col-sm-12">
+                        <div class="alert alert-light" role="alert">
+                            <p>Opa! Não existem dados para exibir.</p>
+                        </div>
+                    </center>
                 }
+               
             }
 
         </div>

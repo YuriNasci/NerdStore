@@ -18,7 +18,6 @@ namespace NerdStore.WebApp.MVC.Extensions
         {
             var notificacoes = await Task.FromResult(_notifications.ObterNotificacoes());
             notificacoes.ForEach(c => ViewData.ModelState.AddModelError(string.Empty, c.Value));
-
             return View();
         }
     }

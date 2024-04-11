@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NerdStore.Catalogo.Application.ViewModels.ProdutoViewModel>
+﻿@model IEnumerable<ProdutoViewModel>
 
 @{
     ViewData["Title"] = "Vitrine";
@@ -62,35 +62,62 @@
 </style>
 <div class="container">
 
-    <h1>Administração de Produtos</h1>
+    <h3>Administração de Produtos</h3>
     <hr />
-    <div class="row">
-        <a asp-controller="AdminProdutos" asp-action="NovoProduto" class="btn btn-success right">+ Adicionar Novo</a>
+
+    <vc:summary />
+
+    <div class="row" supress-by-claim-name="Produto" supress-by-claim-value="Adicionar">
+        <div class="col-md-3 col-md-offset-9">
+            <a asp-controller="AdminProdutos" asp-action="NovoProduto" class="btn btn-success" style="float:right">+ Adicionar Novo</a>
+        </div>
     </div>
     <hr />
     <div class="row">
-        <!-- BEGIN PRODUCTS -->
-        @{
-            foreach (var produto in Model.OrderBy(p => p.CategoriaId))
-            {
-            <div class="col-md-3 col-sm-6">
-                <span class="thumbnail">
-                    <img width="200" height="200" src="~/Images/@produto.Imagem" />
-                    <h4>@produto.Nome</h4>
-                    <p>@produto.QuantidadeEstoque em estoque</p>
-                    <p>@produto.Descricao</p>
-                    <p class="price">@produto.Valor.ToString("C")</p>
-                    <hr class="line">
-                    <div class="row">
-                        <a asp-controller="AdminProdutos" asp-action="AtualizarProduto" asp-route-id="@produto.Id" class="btn btn-success right">Editar</a> &nbsp;
-                        <a asp-controller="AdminProdutos" asp-action="AtualizarEstoque" asp-route-id="@produto.Id" class="btn btn-info right">Estoque</a>
-                    </div>
-                </span>
-            </div>
-            }
-        }
+        <div class="col-md-12">
+            <div class="products">
+                <!-- BEGIN PRODUCTS -->
+                @{
+                    if (Model != null && Model.Any())
+                    {
+                        foreach (var produto in Model.OrderBy(p => p.CategoriaId))
+                        {
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumbnail">
+                                    <div class="image">
+                                        <img src="~/Images/@produto.Imagem" style="height:280px" />
+                                    </div>
+                                    <div class="caption">
+                                        <h4>@produto.Nome</h4>
+                                        <p>@produto.QuantidadeEstoque em estoque</p>
+                                        <p>@produto.Descricao</p>
+                                        <p class="price">@produto.Valor.ToString("C")</p>
+                                        <hr class="line">
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin-right:20px">
+                                                <a disable-by-claim-name="Produto" disable-by-claim-value="Editar" asp-controller="AdminProdutos" asp-action="AtualizarProduto" asp-route-id="@produto.Id" class="btn btn-success">Editar</a> &nbsp;
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a disable-by-claim-name="Produto" disable-by-claim-value="Editar" asp-controller="AdminProdutos" asp-action="AtualizarEstoque" asp-route-id="@produto.Id" class="btn btn-info">Estoque</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-        <!-- END PRODUCTS -->
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-light" role="alert">
+                            <p>Não exitem produtos cadastrados.</p>
+                        </div>
+                    }
+                }
+
+                <!-- END PRODUCTS -->
+            </div>
+        </div>
     </div>
 </div>
 

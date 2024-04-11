@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NerdStore.Core.DomainObjects;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,12 +6,15 @@ using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Data;
 using NerdStore.Core.Messages;
 using NerdStore.Pagamentos.Business;
+using NerdStore.Pagamentos.Data.Extensions;
+using NerdStore.Pagamentos.Data.Entities;
 
 namespace NerdStore.Pagamentos.Data
 {
     public class PagamentoContext : DbContext, IUnitOfWork
     {
         private readonly IMediatorHandler _mediatorHandler;
+              
 
         public PagamentoContext(DbContextOptions<PagamentoContext> options, IMediatorHandler rebusHandler)
             : base(options)
@@ -20,8 +22,9 @@ namespace NerdStore.Pagamentos.Data
             _mediatorHandler = rebusHandler ?? throw new ArgumentNullException(nameof(rebusHandler));
         }
 
-        public DbSet<Pagamento> Pagamentos { get; set; }
-        public DbSet<Transacao> Transacoes { get; set; }
+        public virtual DbSet<Pagamento> Pagamentos { get; set; }
+        public virtual DbSet<Transacao> Transacoes { get; set; }
+        internal virtual DbSet<SeedingEntry> SeedingEntries { get; set; }
 
 
         public async Task<bool> Commit()

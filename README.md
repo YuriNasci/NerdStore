@@ -9,12 +9,12 @@
     <br>
     <strong>TECNOLOGIAS .NET C#</strong>
     <br>
-    <strong>2023</strong>
+    <strong>2024</strong>
   </p>
     
   <p align="right">
     <strong>ALEXANDER SILVA</strong><br>
-    <strong>IURY NASCIMENTO</strong><br>
+    <strong>YURI NASCIMENTO</strong><br>
     <strong>PEDRO NOVAES</strong>   
   </p>
 

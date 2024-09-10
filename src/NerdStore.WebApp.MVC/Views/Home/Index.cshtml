@@ -86,7 +86,7 @@
 					        {                   
 								<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 									<div class="product">
-										<div class="image"><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img src="~/images/@produto.Imagem" style="height:280px" /></a></div>
+										<div class="image"><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img src="@produto.Imagem" style="height:280px" /></a></div>
 										<div class="buttons">
 											<a class="btn cart" href="#"><span class="glyphicon glyphicon-shopping-cart"></span></a>
 											<a class="btn wishlist" href="#"><span class="glyphicon glyphicon-heart"></span></a>
@@ -141,7 +141,7 @@
 							{
 								<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 									<div class="product">
-										<div class="image"><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img src="~/images/@produto.Imagem" style="height:280px" /></a></div>
+										<div class="image"><a asp-controller="Vitrine" asp-action="ProdutoDetalhe" asp-route-id="@produto.Id"><img src="@produto.Imagem" style="height:280px" /></a></div>
 										<div class="buttons">
 											<a class="btn cart" href="#"><span class="glyphicon glyphicon-shopping-cart"></span></a>
 											<a class="btn wishlist" href="#"><span class="glyphicon glyphicon-heart"></span></a>

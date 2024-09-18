@@ -85,5 +85,16 @@ namespace NerdStore.Catalogo.Application.Services
             _produtoRepository?.Dispose();
             _estoqueService?.Dispose();
         }
+
+        public Task<bool> AdicionarProduto(ProdutoImagemViewModel produtoViewModel)
+        {
+
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AtualizarProduto(ProdutoImagemViewModel produtoViewModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

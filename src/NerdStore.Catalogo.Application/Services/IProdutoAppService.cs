@@ -14,7 +14,8 @@ namespace NerdStore.Catalogo.Application.Services
 
         Task<bool> AdicionarProduto(ProdutoViewModel produtoViewModel);
         Task<bool> AtualizarProduto(ProdutoViewModel produtoViewModel);
-
+        Task<bool> AdicionarProduto(ProdutoImagemViewModel produtoViewModel);
+        Task<bool> AtualizarProduto(ProdutoImagemViewModel produtoViewModel);
         Task<ProdutoViewModel> DebitarEstoque(Guid id, int quantidade);
         Task<ProdutoViewModel> ReporEstoque(Guid id, int quantidade);
     }

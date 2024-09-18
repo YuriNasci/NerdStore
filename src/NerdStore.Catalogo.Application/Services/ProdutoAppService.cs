@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using NerdStore.Catalogo.Application.ViewModels;
+using NerdStore.Catalogo.Data.Storage;
 using NerdStore.Catalogo.Domain;
 using NerdStore.Core.DomainObjects;
 
@@ -14,14 +15,18 @@ namespace NerdStore.Catalogo.Application.Services
         private readonly IProdutoRepository _produtoRepository;
         private readonly IEstoqueService _estoqueService;
         private readonly IMapper _mapper;
+        private AzureStorageAccount _azureStorageAccount { get; set; }
 
         public ProdutoAppService(IProdutoRepository produtoRepository, 
                                  IMapper mapper, 
-                                 IEstoqueService estoqueService)
+                                 IEstoqueService estoqueService
+                                 ,AzureStorageAccount azureStorageAccount
+            )
         {
             _produtoRepository = produtoRepository;
             _mapper = mapper;
             _estoqueService = estoqueService;
+            _azureStorageAccount = azureStorageAccount;
         }
 
         public async Task<IEnumerable<ProdutoViewModel>> ObterPorCategoria(int codigo)
@@ -86,13 +91,20 @@ namespace NerdStore.Catalogo.Application.Services
             _estoqueService?.Dispose();
         }
 
-        public Task<bool> AdicionarProduto(ProdutoImagemViewModel produtoViewModel)
+        public async Task<bool> AdicionarProduto(ProdutoImagemViewModel produtoViewModel)
         {
+            string urlImagem = await this._azureStorageAccount.UploadImage(produtoViewModel.ImagemBase64String);
 
-            throw new NotImplementedException();
+            _produtoRepository.Adicionar(
+                new Produto(produtoViewModel.Nome, produtoViewModel.Descricao, produtoViewModel.Ativo,
+                        produtoViewModel.Valor, produtoViewModel.CategoriaId, produtoViewModel.DataCadastro,
+                        urlImagem, new Dimensoes(produtoViewModel.Altura, produtoViewModel.Largura, produtoViewModel.Profundidade))
+            );
+
+            return await _produtoRepository.UnitOfWork.Commit();
         }
 
-        public Task<bool> AtualizarProduto(ProdutoImagemViewModel produtoViewModel)
+        public async Task<bool> AtualizarProduto(ProdutoImagemViewModel produtoViewModel)
         {
             throw new NotImplementedException();
         }

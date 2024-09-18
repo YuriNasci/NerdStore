@@ -5,16 +5,17 @@ using NerdStore.Catalogo.Data.Extensions;
 using NerdStore.API.Configurations;
 using NerdStore.Vendas.Data.Extensions;
 using NerdStore.Pagamentos.Data.Extensions;
-
+using NerdStore.Catalogo.Data.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add builder.Services to the container.
-
+#region Services
 builder.Services.AddApiConfiguration(builder);
 builder.Services.AddCatalogoData(builder.Configuration);
 builder.Services.AddVendasData(builder.Configuration);
 builder.Services.AddPagamentosData(builder.Configuration);
+builder.Services.AddScoped<AzureStorageAccount>();
+#endregion
 
 builder.Services.RegisterServices();
 

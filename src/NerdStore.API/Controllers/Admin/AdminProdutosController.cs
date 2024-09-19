@@ -97,5 +97,51 @@ namespace NerdStore.API.Controllers.Admin
 
             return RespostaPersonalizada(categorias);
         }
+
+        [HttpPost]
+        [Route("novo-produto-com-imagem")]
+        public async Task<IActionResult> NovoProdutoComImagem([FromForm] ProdutoImagemViewModel produtoViewModel)
+        {
+            if (!ModelState.IsValid) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar criar um novo produto.");
+
+            if (produtoViewModel.Imagem != null && produtoViewModel.Imagem.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await produtoViewModel.Imagem.CopyToAsync(memoryStream);
+                produtoViewModel.ImagemBase64String = Convert.ToBase64String(memoryStream.ToArray());
+            }
+
+            var response = await _produtoAppService.AdicionarProduto(produtoViewModel);
+
+            if(response == false) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar criar um novo produto.");
+
+            AdicionaMensagemSucesso("Novo Produto criado com sucesso.");
+
+            return RespostaPersonalizada(StatusCodes.Status201Created);
+        }
+
+        [HttpPut]
+        [Route("atualizar-produto-com-imagem")]
+        public async Task<IActionResult> AtualizarProdutoComImagem([FromForm] ProdutoImagemViewModel produtoViewModel)
+        {
+            ModelState.Remove("QuantidadeEstoque");
+            if (!ModelState.IsValid) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar atualizar o produto.");
+
+            if (produtoViewModel.Imagem != null && produtoViewModel.Imagem.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await produtoViewModel.Imagem.CopyToAsync(memoryStream);
+                produtoViewModel.ImagemBase64String = Convert.ToBase64String(memoryStream.ToArray());
+            }
+
+            var response = await _produtoAppService.AtualizarProduto(produtoViewModel);
+
+            if (response == false) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar atualizar o produto.");
+            
+            AdicionaMensagemSucesso("Produto atualizado com sucesso.");
+            
+            return RespostaPersonalizada(StatusCodes.Status200OK);
+        }
+
     }
 }

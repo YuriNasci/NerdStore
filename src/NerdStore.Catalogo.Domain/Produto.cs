@@ -44,6 +44,30 @@ namespace NerdStore.Catalogo.Domain
             Validar();
         }
 
+        public Produto(
+               Guid id,
+               string nome,
+               string descricao,
+               bool ativo,
+               decimal valor,
+               Guid categoriaId,
+               DateTime dataCadastro,
+               string imagem,
+               Dimensoes dimensoes)
+        {
+            Id = id;
+            Nome = nome;
+            Descricao = descricao;
+            Ativo = ativo;
+            Valor = valor;
+            CategoriaId = categoriaId;
+            DataCadastro = dataCadastro;
+            Imagem = imagem;
+            Dimensoes = dimensoes;
+
+            Validar();
+        }
+
         public void Ativar() => Ativo = true;
 
         public void Desativar() => Ativo = false;

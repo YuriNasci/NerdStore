@@ -106,7 +106,14 @@ namespace NerdStore.Catalogo.Application.Services
 
         public async Task<bool> AtualizarProduto(ProdutoImagemViewModel produtoViewModel)
         {
-            throw new NotImplementedException();
+            string urlImagem = await this._azureStorageAccount.UploadImage(produtoViewModel.ImagemBase64String);
+
+            Produto produto = new Produto(produtoViewModel.Id, produtoViewModel.Nome, produtoViewModel.Descricao, produtoViewModel.Ativo,
+                        produtoViewModel.Valor, produtoViewModel.CategoriaId, produtoViewModel.DataCadastro,
+                        urlImagem, new Dimensoes(produtoViewModel.Altura, produtoViewModel.Largura, produtoViewModel.Profundidade));
+            _produtoRepository.Atualizar(produto);
+
+            return await _produtoRepository.UnitOfWork.Commit();
         }
     }
 }

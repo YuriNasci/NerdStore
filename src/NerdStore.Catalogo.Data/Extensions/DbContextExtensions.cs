@@ -25,6 +25,7 @@ namespace NerdStore.Catalogo.Data.Extensions
                   {					 
 					  x.MigrationsHistoryTable("__EFMigrationsHistory");
                       x.MigrationsAssembly(typeof(CatalogoContext).Assembly.GetName().Name);
+                      x.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                   });
             });
 

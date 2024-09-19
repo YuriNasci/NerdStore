@@ -122,16 +122,16 @@ namespace NerdStore.API.Controllers.Admin
 
         [HttpPut]
         [Route("atualizar-produto-com-imagem")]
-        public async Task<IActionResult> AtualizarProdutoComImagem([FromForm] ProdutoViewModel produtoViewModel, IFormFile imagem)
+        public async Task<IActionResult> AtualizarProdutoComImagem([FromForm] ProdutoImagemViewModel produtoViewModel)
         {
             ModelState.Remove("QuantidadeEstoque");
             if (!ModelState.IsValid) return ProcessarRespostaMensagem(StatusCodes.Status400BadRequest, "Ocorreu um erro ao tentar atualizar o produto.");
 
-            if (imagem != null && imagem.Length > 0)
+            if (produtoViewModel.Imagem != null && produtoViewModel.Imagem.Length > 0)
             {
                 using var memoryStream = new MemoryStream();
-                await imagem.CopyToAsync(memoryStream);
-                produtoViewModel.Imagem = Convert.ToBase64String(memoryStream.ToArray());
+                await produtoViewModel.Imagem.CopyToAsync(memoryStream);
+                produtoViewModel.ImagemBase64String = Convert.ToBase64String(memoryStream.ToArray());
             }
 
             var response = await _produtoAppService.AtualizarProduto(produtoViewModel);

@@ -28,7 +28,7 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - NerdStore.API/**
+      - src/NerdStore.API/**
   workflow_dispatch:
 
 permissions:

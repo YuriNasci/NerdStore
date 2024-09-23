@@ -22,14 +22,11 @@ builder.Services.RegisterServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.SeedCatalogoData(app.Configuration);
-    app.SeedVendasFromScripts(app.Configuration);
-    app.SeedPagamentosFromScripts(app.Configuration);
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+app.SeedCatalogoData(app.Configuration);
+app.SeedVendasFromScripts(app.Configuration);
+app.SeedPagamentosFromScripts(app.Configuration);
 
 var supportedCultures = new[] { new CultureInfo("pt-BR") };
 app.UseRequestLocalization(new RequestLocalizationOptions

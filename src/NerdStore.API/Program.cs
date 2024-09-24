@@ -39,15 +39,9 @@ app.UseRequestLocalization(new RequestLocalizationOptions
 });
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
 app.UseCors("Total");
-
 app.UseAuthorization();
-
 app.UseMiddleware<ExceptionMiddleware>();
-
 app.MapControllers();
-
 app.Run();

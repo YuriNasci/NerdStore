@@ -21,8 +21,11 @@ builder.Services.RegisterServices();
 
 var app = builder.Build();
 
+#region Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
+#endregion
+
 app.SeedCatalogoData(app.Configuration);
 app.SeedVendasFromScripts(app.Configuration);
 app.SeedPagamentosFromScripts(app.Configuration);

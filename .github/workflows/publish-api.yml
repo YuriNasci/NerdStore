@@ -55,10 +55,10 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Build with dotnet
-        run: dotnet build ./SoundVillage.Api --configuration Release
+        run: dotnet build ./NerdStore.API --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ./SoundVillage.Api -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ./NerdStore.API -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
